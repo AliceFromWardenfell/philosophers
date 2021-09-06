@@ -6,110 +6,49 @@
 /*   By: alisa <alisa@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/03 02:41:07 by alisa             #+#    #+#             */
-/*   Updated: 2021/09/04 18:59:58 by alisa            ###   ########.fr       */
+/*   Updated: 2021/09/06 08:46:59 by alisa            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-void	lock_yourself(int philo_name, int num_of_philos, pthread_mutex_t *locks)
+void	init_mutexes(t_main *m)
 {
-	pthread_mutex_lock(&locks[philo_name - 1]);
-	pthread_mutex_lock(&locks[philo_name - 1 + num_of_philos]);
-	printf("%d locked himself (%d) (%d)\n", philo_name, philo_name - 1, philo_name - 1 + num_of_philos);
+	int		i;
+
+	m->mutex_fork = malloc(m->info.num_of_philos * sizeof(*m->mutex_fork));
+	i = -1;
+	while (++i < m->info.num_of_philos)
+	{
+		pthread_mutex_init(&m->mutex_fork[i], NULL);
+		pthread_mutex_lock(&m->mutex_fork[i]);
+	}
+	m->mutex_ctrl = malloc(2 * sizeof(*m->mutex_ctrl));
+	i = -1;
+	while (++i < 2)
+		pthread_mutex_init(&m->mutex_ctrl[i], NULL);
 }
 
-void	unlock_neighbours(int philo_name, int num_of_philos, pthread_mutex_t *locks)
+void	initialization(t_main *m)
 {
-	if (philo_name == 1)
-	{
-		pthread_mutex_unlock(&locks[num_of_philos - 1]);
-		printf("%d unlocked %d's left lock (%d)\n", philo_name, num_of_philos, num_of_philos - 1);
-	}
-	else
-	{
-		pthread_mutex_unlock(&locks[philo_name - 2]);
-		printf("%d unlocked %d's left lock (%d)\n", philo_name, philo_name - 1, philo_name - 2);
-	}
-	if (philo_name == num_of_philos)
-	{
-		pthread_mutex_unlock(&locks[num_of_philos]);
-		printf("%d unlocked 1's right lock (%d)\n", philo_name, num_of_philos);
-	}
-	else
-	{
-		pthread_mutex_unlock(&locks[philo_name + num_of_philos]);
-		printf("%d unlocked %d's right lock (%d)\n", philo_name, philo_name + 1, philo_name + num_of_philos);
-	}
-}
-
-void	philo_eats(int philo_name, int num_of_philos, pthread_mutex_t *mutex)
-{
-	pthread_mutex_lock(&mutex[philo_name]);
-	pthread_mutex_lock(&mutex[philo_name % num_of_philos + 1]);
-	printf("%d starts eating\n", philo_name);
-	usleep(1000000);
-	// printf("%d ends eating\n", philo_name);
-	pthread_mutex_unlock(&mutex[philo_name]);
-	pthread_mutex_unlock(&mutex[philo_name % num_of_philos + 1]);
-}
-
-void	philo_sleeps(void)
-{
-	// printf("%d starts sleeping\n", philo_name);
-	usleep(1);
-	// printf("%d ends sleeping\n", philo_name);
-}
-
-void	*philo_life(void *arg)
-{
-	t_main	*m;
-	int		philo_name;
-
-	m = (t_main *)arg;
-	pthread_mutex_lock(&m->mutex[NAME]);
-	philo_name = m->next_philo_name++;
-	pthread_mutex_unlock(&m->mutex[NAME]);
-	while (1)
-	{
-		lock_yourself(philo_name, m->num_of_philos, m->locks);
-		philo_eats(philo_name, m->num_of_philos, m->mutex);
-		unlock_neighbours(philo_name, m->num_of_philos, m->locks);
-		philo_sleeps();
-		// printf("%d starts thinking\n", philo_name);
-	}
-	return (NULL);
-}
-
-void	init(t_main *m)
-{
-	m->mutex = malloc((TH_NUM + 1) * sizeof(*m->mutex));
-	m->locks = malloc(TH_NUM * 2 * sizeof(*m->locks));
-	m->x = 0;
-	m->next_philo_name = 1;
+	m->info.num_of_philos = NUMBER_OF_PHILOSOPHERS;
+	m->info.time_to_die = TIME_TO_DIE;
+	m->info.time_to_eat = TIME_TO_EAT;
+	m->info.time_to_sleep = TIME_TO_SLEEP;
+	m->info.num_of_meals = NUMBER_OF_TIME_EACH_PHILOSOPHER_MUST_EAT;
+	m->info.free_name = 1;
+	m->philo = malloc(m->info.num_of_philos * sizeof(*m->philo));
+	init_mutexes(m);
 }
 
 int	main(void)
 {
-	int			i;
-	pthread_t	t1[TH_NUM];
 	t_main		m;
 
-	init(&m);
-	m.num_of_philos = TH_NUM;
-	i = -1;
-	while (++i < TH_NUM)
-		pthread_mutex_init(&m.mutex[i], NULL);
-	i = -1;
-	while (++i < TH_NUM * 2)
-		pthread_mutex_init(&m.locks[i], NULL);
-	i = -1;
-	while (++i < TH_NUM)
-	{
-		pthread_create(&t1[i], NULL, &philo_life, (void *)&m);
-	}
-	i = -1;
-	while (++i < TH_NUM)
-		pthread_join(t1[i], NULL);
+	initialization(&m);
+	philos_birth(&m);
 	return (0);
 }
+// pthread_mutex_init(&m.locks[i], NULL);
+// pthread_create(&t1[i], NULL, &philo_life, (void *)&m);
+// pthread_join(t1[i], NULL);

@@ -10,7 +10,9 @@ vpath %.c	$(SRCS_DIR)
 vpath %.h	$(HDRS_DIR)
 INCLUDES	:= -I$(HDRS_DIR)
 
-SRCS		:= main.c
+SRCS		:= main.c \
+			error.c \
+			philos_birth.c
 
 OBJS_DIR	:= .objects
 OBJS		:= $(SRCS:%.c=$(OBJS_DIR)/%.o)
