@@ -6,7 +6,7 @@
 /*   By: alisa <alisa@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/03 02:41:07 by alisa             #+#    #+#             */
-/*   Updated: 2021/09/06 08:46:59 by alisa            ###   ########.fr       */
+/*   Updated: 2021/09/07 06:11:12 by alisa            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	init_mutexes(t_main *m)
 	while (++i < m->info.num_of_philos)
 	{
 		pthread_mutex_init(&m->mutex_fork[i], NULL);
-		pthread_mutex_lock(&m->mutex_fork[i]);
+		// pthread_mutex_lock(&m->mutex_fork[i]);
 	}
 	m->mutex_ctrl = malloc(2 * sizeof(*m->mutex_ctrl));
 	i = -1;
@@ -38,15 +38,32 @@ void	initialization(t_main *m)
 	m->info.num_of_meals = NUMBER_OF_TIME_EACH_PHILOSOPHER_MUST_EAT;
 	m->info.free_name = 1;
 	m->philo = malloc(m->info.num_of_philos * sizeof(*m->philo));
+	m->thread = malloc(m->info.num_of_philos * sizeof(*m->thread));
 	init_mutexes(m);
 }
 
 int	main(void)
 {
 	t_main		m;
+	int			i;
 
 	initialization(&m);
 	philos_birth(&m);
+	i = -1;
+	while (++i < m.info.num_of_philos)
+	{
+		// pthread_mutex_lock(&m->mutex_fork[i]);
+		pthread_mutex_destroy(&m.mutex_fork[i]);
+	}
+	i = -1;
+	while (++i < 2)
+		pthread_mutex_destroy(&m.mutex_ctrl[i]);
+	i = -1;
+	while (++i < m.info.num_of_philos)
+		pthread_join(m.thread[i], NULL);
+	// free(m.philo);
+	// free(m.mutex_fork);
+	// free(m.mutex_ctrl);
 	return (0);
 }
 // pthread_mutex_init(&m.locks[i], NULL);
