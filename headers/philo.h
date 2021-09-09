@@ -6,7 +6,7 @@
 /*   By: alisa <alisa@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/03 02:41:33 by alisa             #+#    #+#             */
-/*   Updated: 2021/09/10 01:51:09 by alisa            ###   ########.fr       */
+/*   Updated: 2021/09/10 02:08:30 by alisa            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,23 +40,18 @@ typedef struct s_info
 	int		num_of_finished_meals;
 }			t_info;
 
-// typedef struct s_philo
-// {
-// 	int			name;
-// }				t_philo;
-
 typedef struct s_main
 {
 	pthread_t		*thread;
+	pthread_t		waiter;
 	pthread_mutex_t	*mutex_fork;
 	pthread_mutex_t	*mutex_philo;
 	pthread_mutex_t	*mutex_ctrl;
-	// struct s_philo	*philo;
 	struct s_info	info;
 }					t_main;
 
 void	philos_birth(t_main *m);
-void	waiter(t_main *m);
+void	waiter_birth(t_main *m);
 int		error(void);
 
 #endif

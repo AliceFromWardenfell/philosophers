@@ -6,7 +6,7 @@
 /*   By: alisa <alisa@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/03 02:41:07 by alisa             #+#    #+#             */
-/*   Updated: 2021/09/10 01:38:42 by alisa            ###   ########.fr       */
+/*   Updated: 2021/09/10 02:10:41 by alisa            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void	init_mutexes(t_main *m)
 	int				i;
 
 	m->mutex_fork = malloc(m->info.num_of_philos * sizeof(*m->mutex_fork));
-	m->mutex_philo = malloc(m->info.num_of_philos * sizeof(*m->mutex_philo)); // 0-th place unused
+	m->mutex_philo = malloc(m->info.num_of_philos * sizeof(*m->mutex_philo));
 	i = -1;
 	while (++i < m->info.num_of_philos)
 	{
@@ -43,7 +43,6 @@ void	initialization(t_main *m)
 		m->info.num_of_finished_meals = m->info.num_of_philos / 2;
 	else
 		m->info.num_of_finished_meals = 1;
-	// m->philo = malloc(m->info.num_of_philos * sizeof(*m->philo));
 	m->thread = malloc(m->info.num_of_philos * sizeof(*m->thread));
 	init_mutexes(m);
 }
@@ -55,7 +54,7 @@ int	main(void)
 
 	initialization(&m);
 	philos_birth(&m);
-	waiter(&m);
+	waiter_birth(&m);
 	while (TRUE)
 		usleep(100);
 	i = -1;

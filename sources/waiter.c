@@ -6,7 +6,7 @@
 /*   By: alisa <alisa@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/10 00:55:22 by alisa             #+#    #+#             */
-/*   Updated: 2021/09/10 01:51:11 by alisa            ###   ########.fr       */
+/*   Updated: 2021/09/10 02:11:19 by alisa            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ static void	allow_odd_ones_to_eat(t_main *m, int expected_amount_of_meals)
 
 	while (TRUE)
 	{
-		if (m->info.num_of_finished_meals == expected_amount_of_meals) //?
+		if (m->info.num_of_finished_meals == expected_amount_of_meals)
 		{
 			printf("the odd ones...\n");
 			i = 0;
@@ -40,7 +40,7 @@ static void	allow_even_ones_to_eat(t_main *m)
 
 	while (TRUE)
 	{
-		if (m->info.num_of_finished_meals == m->info.num_of_philos / 2) //?
+		if (m->info.num_of_finished_meals == m->info.num_of_philos / 2)
 		{
 			printf("the even ones...\n");
 			i = 1;
@@ -65,7 +65,7 @@ static void	allow_last_one_to_eat(t_main *m)
 			m->info.num_of_finished_meals = 0;
 			break ;
 		}
-		if (m->info.num_of_finished_meals == m->info.num_of_philos / 2) //?
+		if (m->info.num_of_finished_meals == m->info.num_of_philos / 2)
 		{
 			printf("the last one...\n");
 			pthread_mutex_unlock(&m->mutex_philo[m->info.num_of_philos - 1]);
@@ -76,11 +76,12 @@ static void	allow_last_one_to_eat(t_main *m)
 	}
 }
 
-void	waiter(t_main *m)
+static void	*waiter(void *arg)
 {
+	t_main	*m;
 	int		expected_amount_of_meals;
 
-	usleep(2000000);
+	m = (t_main *)arg;
 	if (m->info.num_of_philos % 2 == 0)
 		expected_amount_of_meals = m->info.num_of_philos / 2;
 	else
@@ -91,4 +92,10 @@ void	waiter(t_main *m)
 		allow_even_ones_to_eat(m);
 		allow_last_one_to_eat(m);
 	}
+	return (NULL);
+}
+
+void	waiter_birth(t_main *m)
+{
+	pthread_create(&m->waiter, NULL, &waiter, (void *)m);
 }
