@@ -6,7 +6,7 @@
 /*   By: alisa <alisa@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/03 02:41:33 by alisa             #+#    #+#             */
-/*   Updated: 2021/09/07 05:48:42 by alisa            ###   ########.fr       */
+/*   Updated: 2021/09/09 04:38:15 by alisa            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,17 +39,17 @@ typedef struct s_info
 	int		free_name;
 }			t_info;
 
-typedef struct s_philo
-{
-	int			name;
-}				t_philo;
+// typedef struct s_philo
+// {
+// 	int			name;
+// }				t_philo;
 
 typedef struct s_main
 {
 	pthread_t		*thread;
 	pthread_mutex_t	*mutex_fork;
 	pthread_mutex_t	*mutex_ctrl;
-	struct s_philo	*philo;
+	// struct s_philo	*philo;
 	struct s_info	info;
 }					t_main;
 
