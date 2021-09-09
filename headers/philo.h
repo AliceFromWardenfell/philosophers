@@ -6,7 +6,7 @@
 /*   By: alisa <alisa@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/03 02:41:33 by alisa             #+#    #+#             */
-/*   Updated: 2021/09/09 04:38:15 by alisa            ###   ########.fr       */
+/*   Updated: 2021/09/09 05:58:58 by alisa            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,8 @@
 # define NUMBER_OF_TIME_EACH_PHILOSOPHER_MUST_EAT 7
 
 # define NAME 0
-# define TABLE 1
+# define TAKE_FORKS 1
+# define PUT_FORKS 2
 
 # define TRUE 1
 

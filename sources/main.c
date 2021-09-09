@@ -6,7 +6,7 @@
 /*   By: alisa <alisa@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/03 02:41:07 by alisa             #+#    #+#             */
-/*   Updated: 2021/09/09 05:29:13 by alisa            ###   ########.fr       */
+/*   Updated: 2021/09/09 06:00:34 by alisa            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,9 @@ void	init_mutexes(t_main *m)
 	i = -1;
 	while (++i < m->info.num_of_philos)
 		pthread_mutex_init(&m->mutex_fork[i], NULL);
-	m->mutex_ctrl = malloc(2 * sizeof(*m->mutex_ctrl));
+	m->mutex_ctrl = malloc(3 * sizeof(*m->mutex_ctrl));
 	i = -1;
-	while (++i < 2)
+	while (++i < 3)
 		pthread_mutex_init(&m->mutex_ctrl[i], NULL);
 }
 
