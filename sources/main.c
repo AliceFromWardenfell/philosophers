@@ -6,7 +6,7 @@
 /*   By: alisa <alisa@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/03 02:41:07 by alisa             #+#    #+#             */
-/*   Updated: 2021/09/09 06:00:34 by alisa            ###   ########.fr       */
+/*   Updated: 2021/09/10 01:38:42 by alisa            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,15 +14,20 @@
 
 void	init_mutexes(t_main *m)
 {
-	int		i;
+	int				i;
 
 	m->mutex_fork = malloc(m->info.num_of_philos * sizeof(*m->mutex_fork));
+	m->mutex_philo = malloc(m->info.num_of_philos * sizeof(*m->mutex_philo)); // 0-th place unused
 	i = -1;
 	while (++i < m->info.num_of_philos)
+	{
 		pthread_mutex_init(&m->mutex_fork[i], NULL);
-	m->mutex_ctrl = malloc(3 * sizeof(*m->mutex_ctrl));
+		pthread_mutex_init(&m->mutex_philo[i], NULL);
+		pthread_mutex_lock(&m->mutex_philo[i]);
+	}
+	m->mutex_ctrl = malloc(2 * sizeof(*m->mutex_ctrl));
 	i = -1;
-	while (++i < 3)
+	while (++i < 2)
 		pthread_mutex_init(&m->mutex_ctrl[i], NULL);
 }
 
@@ -34,6 +39,10 @@ void	initialization(t_main *m)
 	m->info.time_to_sleep = TIME_TO_SLEEP;
 	m->info.num_of_meals = NUMBER_OF_TIME_EACH_PHILOSOPHER_MUST_EAT;
 	m->info.free_name = 1;
+	if (m->info.num_of_philos % 2 == 0)
+		m->info.num_of_finished_meals = m->info.num_of_philos / 2;
+	else
+		m->info.num_of_finished_meals = 1;
 	// m->philo = malloc(m->info.num_of_philos * sizeof(*m->philo));
 	m->thread = malloc(m->info.num_of_philos * sizeof(*m->thread));
 	init_mutexes(m);
@@ -41,11 +50,12 @@ void	initialization(t_main *m)
 
 int	main(void)
 {
-	t_main		m;
-	int			i;
+	t_main			m;
+	int				i;
 
 	initialization(&m);
 	philos_birth(&m);
+	waiter(&m);
 	while (TRUE)
 		usleep(100);
 	i = -1;

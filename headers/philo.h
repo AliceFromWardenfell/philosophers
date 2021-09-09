@@ -6,7 +6,7 @@
 /*   By: alisa <alisa@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/03 02:41:33 by alisa             #+#    #+#             */
-/*   Updated: 2021/09/09 05:58:58 by alisa            ###   ########.fr       */
+/*   Updated: 2021/09/10 01:51:09 by alisa            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,7 @@
 # define NUMBER_OF_TIME_EACH_PHILOSOPHER_MUST_EAT 7
 
 # define NAME 0
-# define TAKE_FORKS 1
-# define PUT_FORKS 2
+# define MEAL 1
 
 # define TRUE 1
 
@@ -38,6 +37,7 @@ typedef struct s_info
 	int		time_to_sleep;
 	int		num_of_meals;
 	int		free_name;
+	int		num_of_finished_meals;
 }			t_info;
 
 // typedef struct s_philo
@@ -49,12 +49,14 @@ typedef struct s_main
 {
 	pthread_t		*thread;
 	pthread_mutex_t	*mutex_fork;
+	pthread_mutex_t	*mutex_philo;
 	pthread_mutex_t	*mutex_ctrl;
 	// struct s_philo	*philo;
 	struct s_info	info;
 }					t_main;
 
 void	philos_birth(t_main *m);
+void	waiter(t_main *m);
 int		error(void);
 
 #endif

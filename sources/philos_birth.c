@@ -6,33 +6,37 @@
 /*   By: alisa <alisa@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/06 07:21:16 by alisa             #+#    #+#             */
-/*   Updated: 2021/09/09 06:55:29 by alisa            ###   ########.fr       */
+/*   Updated: 2021/09/10 01:37:48 by alisa            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
 void	philo_eats(t_main *m, int philo_name, int left, int right)
-{
-	pthread_mutex_lock(&m->mutex_ctrl[TAKE_FORKS]);
+{	
+	printf("%d waiting for permision to eat\n", philo_name);
+	pthread_mutex_lock(&m->mutex_philo[philo_name - 1]);
+	
 	pthread_mutex_lock(&m->mutex_fork[right]);
 	// printf("%d has taken %d fork\n", philo_name, right);
 	pthread_mutex_lock(&m->mutex_fork[left]);
 	// printf("%d has taken %d fork\n", philo_name, left);
-	pthread_mutex_unlock(&m->mutex_ctrl[TAKE_FORKS]);
 	printf("%d starts eating.\n", philo_name);
-	usleep(2000000);
-	// pthread_mutex_lock(&m->mutex_ctrl[PUT_FORKS]);
+	usleep(500000);
+
+	pthread_mutex_lock(&m->mutex_ctrl[MEAL]);
+	m->info.num_of_finished_meals++;
+	pthread_mutex_unlock(&m->mutex_ctrl[MEAL]);
+
 	// printf("%d has put %d fork\n", philo_name, right);
 	pthread_mutex_unlock(&m->mutex_fork[right]);
 	// printf("%d has put %d fork\n", philo_name, left);
 	pthread_mutex_unlock(&m->mutex_fork[left]);
-	// pthread_mutex_unlock(&m->mutex_ctrl[PUT_FORKS]);
 }
 
 void	philo_sleeps(void)
 {
-	usleep(10000);
+	usleep(60000);
 }
 
 void	*philo_life(void *arg)
