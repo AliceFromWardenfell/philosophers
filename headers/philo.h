@@ -6,7 +6,7 @@
 /*   By: alisa <alisa@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/03 02:41:33 by alisa             #+#    #+#             */
-/*   Updated: 2021/09/10 03:54:08 by alisa            ###   ########.fr       */
+/*   Updated: 2021/09/10 05:26:55 by alisa            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 # include <stdlib.h>
 # include <pthread.h>
 # include <unistd.h>
+# include <sys/time.h>
 
 # define NUMBER_OF_PHILOSOPHERS 5
 # define TIME_TO_DIE 800
@@ -39,9 +40,17 @@ typedef struct s_info
 	int		time_to_sleep;
 	int		num_of_meals;
 	int		free_name;
+	int		free_name_;
 	int		num_of_finished_meals;
 	int		somebody_died;
 }			t_info;
+
+typedef struct s_philo
+{
+	int				curr_num_of_meals;
+	long			last_meal_time;
+	struct timeval	birth_time;
+}			t_philo;
 
 typedef struct s_main
 {
@@ -52,11 +61,13 @@ typedef struct s_main
 	pthread_mutex_t	*mutex_philo;
 	pthread_mutex_t	*mutex_ctrl;
 	struct s_info	info;
+	struct s_philo	*philo;
 }					t_main;
 
 void	philos_birth(t_main *m);
 void	waiter_birth(t_main *m);
 void	doctors(t_main *m);
+long	curr_timestamp(t_main *m, int philo_name);
 int		error(void);
 
 #endif

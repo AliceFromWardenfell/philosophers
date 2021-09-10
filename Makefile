@@ -14,13 +14,14 @@ SRCS		:= main.c \
 			error.c \
 			philos_birth.c \
 			waiter.c \
-			doctors.c
+			doctors.c \
+			time.c
 
 OBJS_DIR	:= .objects
 OBJS		:= $(SRCS:%.c=$(OBJS_DIR)/%.o)
 
 all:
-					@echo "$(BOLD)Creating/updating '$(NAME)'...$(DEF)"
+					@echo "$(BOLD)Creating/updating '$(NAME)':$(DEF)"
 					@$(MAKE) --no-print-directory $(NAME)
 
 $(NAME):			$(OBJS)
