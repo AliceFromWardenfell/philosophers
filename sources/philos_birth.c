@@ -6,7 +6,7 @@
 /*   By: alisa <alisa@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/06 07:21:16 by alisa             #+#    #+#             */
-/*   Updated: 2021/09/10 05:29:42 by alisa            ###   ########.fr       */
+/*   Updated: 2021/09/11 02:19:32 by alisa            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,9 @@ void	philo_eats(t_main *m, int philo_name, int left, int right)
 	pthread_mutex_lock(&m->mutex_fork[left]);
 	// printf("%d has taken %d fork\n", philo_name, left);
 	m->philo[philo_name - 1].last_meal_time = curr_timestamp(m, philo_name);
-	printf("%ld %d is eating\n", m->philo[philo_name - 1].last_meal_time,
+	printf("%05ld %d is eating\n", m->philo[philo_name - 1].last_meal_time,
 		philo_name);
-	usleep(60000);
+	usleep(100000);
 	pthread_mutex_lock(&m->mutex_ctrl[MEAL]);
 	m->info.num_of_finished_meals++;
 	pthread_mutex_unlock(&m->mutex_ctrl[MEAL]);
