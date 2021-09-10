@@ -6,7 +6,7 @@
 /*   By: alisa <alisa@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/03 02:41:07 by alisa             #+#    #+#             */
-/*   Updated: 2021/09/10 02:10:41 by alisa            ###   ########.fr       */
+/*   Updated: 2021/09/10 03:49:24 by alisa            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,12 +38,15 @@ void	initialization(t_main *m)
 	m->info.time_to_eat = TIME_TO_EAT;
 	m->info.time_to_sleep = TIME_TO_SLEEP;
 	m->info.num_of_meals = NUMBER_OF_TIME_EACH_PHILOSOPHER_MUST_EAT;
-	m->info.free_name = 1;
+	m->info.free_name = -1;
+	m->info.num_of_pathologists = m->info.num_of_philos / (20 + 1) + 1;
+	m->info.somebody_died = FALSE;
 	if (m->info.num_of_philos % 2 == 0)
 		m->info.num_of_finished_meals = m->info.num_of_philos / 2;
 	else
 		m->info.num_of_finished_meals = 1;
 	m->thread = malloc(m->info.num_of_philos * sizeof(*m->thread));
+	m->pathologist = malloc(m->info.num_of_pathologists * sizeof(*m->pathologist));
 	init_mutexes(m);
 }
 
@@ -53,6 +56,8 @@ int	main(void)
 	int				i;
 
 	initialization(&m);
+	doctors(&m);
+	usleep(3000000);
 	philos_birth(&m);
 	waiter_birth(&m);
 	while (TRUE)

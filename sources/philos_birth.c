@@ -6,7 +6,7 @@
 /*   By: alisa <alisa@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/06 07:21:16 by alisa             #+#    #+#             */
-/*   Updated: 2021/09/10 02:10:37 by alisa            ###   ########.fr       */
+/*   Updated: 2021/09/10 03:48:37 by alisa            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ void	*philo_life(void *arg)
 
 	m = (t_main *)arg;
 	pthread_mutex_lock(&m->mutex_ctrl[NAME]);
-	philo_name = m->info.free_name++;
+	philo_name = ++m->info.free_name;
 	pthread_mutex_unlock(&m->mutex_ctrl[NAME]);
 	left = philo_name % m->info.num_of_philos;
 	right = philo_name - 1;
@@ -64,6 +64,7 @@ void	philos_birth(t_main *m)
 {
 	int		i;
 
+	m->info.free_name = 0;
 	i = -1;
 	while (++i < m->info.num_of_philos)
 		pthread_create(&m->thread[i], NULL, &philo_life, (void *)m);

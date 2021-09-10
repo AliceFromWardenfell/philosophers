@@ -13,7 +13,8 @@ INCLUDES	:= -I$(HDRS_DIR)
 SRCS		:= main.c \
 			error.c \
 			philos_birth.c \
-			waiter.c
+			waiter.c \
+			doctors.c
 
 OBJS_DIR	:= .objects
 OBJS		:= $(SRCS:%.c=$(OBJS_DIR)/%.o)
