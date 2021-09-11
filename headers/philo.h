@@ -6,7 +6,7 @@
 /*   By: alisa <alisa@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/03 02:41:33 by alisa             #+#    #+#             */
-/*   Updated: 2021/09/11 03:11:42 by alisa            ###   ########.fr       */
+/*   Updated: 2021/09/11 03:30:52 by alisa            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ void	waiter_birth(t_main *m);
 void	doctors(t_main *m);
 void	print_status(t_main *m, int philo_name, char *status);
 int		smb_died(t_main *m);
-int		unlock_all_philo(t_main *m);
+int		unlock_all_philo(t_main *m, int expected_amount_of_meals);
 int		error(void);
 
 #endif
