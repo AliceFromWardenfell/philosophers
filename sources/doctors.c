@@ -6,7 +6,7 @@
 /*   By: alisa <alisa@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/10 02:13:28 by alisa             #+#    #+#             */
-/*   Updated: 2021/09/10 05:27:46 by alisa            ###   ########.fr       */
+/*   Updated: 2021/09/11 03:00:04 by alisa            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,8 @@ void	*watch_for_deaths(void *arg)
 	m = (t_main *)arg;
 	pthread_mutex_lock(&m->mutex_ctrl[NAME]);
 	pathologist_name = ++m->info.free_name_;
-	printf("P: my name is %d\n", pathologist_name);
 	pthread_mutex_unlock(&m->mutex_ctrl[NAME]);
+	printf("HI from pathologist %d!\n", pathologist_name);
 	while (TRUE)
 	{
 		i = pathologist_name * 20 - 1;
@@ -32,8 +32,10 @@ void	*watch_for_deaths(void *arg)
 			j = m->info.num_of_philos;
 		while (++i < j)
 		{
-			usleep(1000000);
-			// printf("P%d: %d\n", pathologist_name, i);
+			usleep(3000000);
+			m->info.somebody_died = TRUE;
+			printf("BYE from pathologist %d!\n", pathologist_name);
+			return (NULL);
 		}
 	}
 	return (NULL);

@@ -15,7 +15,7 @@ SRCS		:= main.c \
 			philos_birth.c \
 			waiter.c \
 			doctors.c \
-			time.c
+			utils.c
 
 OBJS_DIR	:= .objects
 OBJS		:= $(SRCS:%.c=$(OBJS_DIR)/%.o)

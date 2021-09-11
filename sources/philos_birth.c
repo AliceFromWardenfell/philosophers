@@ -6,36 +6,36 @@
 /*   By: alisa <alisa@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/06 07:21:16 by alisa             #+#    #+#             */
-/*   Updated: 2021/09/11 02:19:32 by alisa            ###   ########.fr       */
+/*   Updated: 2021/09/11 03:16:50 by alisa            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-void	philo_eats(t_main *m, int philo_name, int left, int right)
+static int	philo_eats(t_main *m, int philo_name, int left, int right)
 {	
 	printf("%d waiting for permision to eat\n", philo_name);
 	pthread_mutex_lock(&m->mutex_philo[philo_name - 1]);
-	
+	printf("%d: check for deaths\n", philo_name);
+	if (smb_died(m) == TRUE)
+		return (TRUE);
 	pthread_mutex_lock(&m->mutex_fork[right]);
 	// printf("%d has taken %d fork\n", philo_name, right);
 	pthread_mutex_lock(&m->mutex_fork[left]);
 	// printf("%d has taken %d fork\n", philo_name, left);
-	m->philo[philo_name - 1].last_meal_time = curr_timestamp(m, philo_name);
-	printf("%05ld %d is eating\n", m->philo[philo_name - 1].last_meal_time,
-		philo_name);
+	print_status(m, philo_name, "is eating");
 	usleep(100000);
 	pthread_mutex_lock(&m->mutex_ctrl[MEAL]);
 	m->info.num_of_finished_meals++;
 	pthread_mutex_unlock(&m->mutex_ctrl[MEAL]);
-
 	// printf("%d has put %d fork\n", philo_name, right);
 	pthread_mutex_unlock(&m->mutex_fork[right]);
 	// printf("%d has put %d fork\n", philo_name, left);
 	pthread_mutex_unlock(&m->mutex_fork[left]);
+	return (OK);
 }
 
-void	philo_sleeps(void)
+static void	philo_sleeps(void)
 {
 	usleep(60000);
 }
@@ -56,7 +56,11 @@ void	*philo_life(void *arg)
 	gettimeofday(&m->philo[philo_name - 1].birth_time, NULL);
 	while (TRUE)
 	{
-		philo_eats(m, philo_name, left, right);
+		if (philo_eats(m, philo_name, left, right))
+		{
+			printf("BYE from %d\n", philo_name);
+			return (NULL); //free here if smthing was alloced
+		}
 		philo_sleeps();
 	}
 	return (NULL);

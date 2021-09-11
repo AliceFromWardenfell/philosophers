@@ -6,18 +6,23 @@
 /*   By: alisa <alisa@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/10 00:55:22 by alisa             #+#    #+#             */
-/*   Updated: 2021/09/10 22:04:38 by alisa            ###   ########.fr       */
+/*   Updated: 2021/09/11 03:12:59 by alisa            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-static void	allow_odd_ones_to_eat(t_main *m, int expected_amount_of_meals)
+static int	allow_odd_ones_to_eat(t_main *m, int expected_amount_of_meals)
 {
 	int		i;
 
 	while (TRUE)
 	{
+		if (smb_died(m) == TRUE)
+		{
+			printf("BYE from waiter!\n");
+			return (unlock_all_philo(m));
+		}
 		if (m->info.num_of_finished_meals == expected_amount_of_meals)
 		{
 			printf("the odd ones...\n");
@@ -32,14 +37,20 @@ static void	allow_odd_ones_to_eat(t_main *m, int expected_amount_of_meals)
 		}
 		usleep(10000);
 	}
+	return (OK);
 }
 
-static void	allow_even_ones_to_eat(t_main *m)
+static int	allow_even_ones_to_eat(t_main *m)
 {
 	int		i;
 
 	while (TRUE)
 	{
+		if (smb_died(m) == TRUE)
+		{
+			printf("BYE from waiter!\n");
+			return (unlock_all_philo(m));
+		}
 		if (m->info.num_of_finished_meals == m->info.num_of_philos / 2)
 		{
 			printf("the even ones...\n");
@@ -54,12 +65,18 @@ static void	allow_even_ones_to_eat(t_main *m)
 		}
 		usleep(10000);
 	}
+	return (OK);
 }
 
-static void	allow_last_one_to_eat(t_main *m)
+static int	allow_last_one_to_eat(t_main *m)
 {
 	while (TRUE)
 	{
+		if (smb_died(m) == TRUE)
+		{
+			printf("BYE from waiter!\n");
+			return (unlock_all_philo(m));
+		}
 		if (m->info.num_of_philos % 2 == 0)
 		{
 			m->info.num_of_finished_meals = 0;
@@ -74,6 +91,7 @@ static void	allow_last_one_to_eat(t_main *m)
 		}
 		usleep(10000);
 	}
+	return (OK);
 }
 
 static void	*waiter(void *arg)
@@ -88,9 +106,12 @@ static void	*waiter(void *arg)
 		expected_amount_of_meals = 1;
 	while (TRUE)
 	{
-		allow_odd_ones_to_eat(m, expected_amount_of_meals);
-		allow_even_ones_to_eat(m);
-		allow_last_one_to_eat(m);
+		if (allow_odd_ones_to_eat(m, expected_amount_of_meals))
+			return (NULL);
+		if (allow_even_ones_to_eat(m))
+			return (NULL);
+		if (allow_last_one_to_eat(m))
+			return (NULL);
 	}
 	return (NULL);
 }

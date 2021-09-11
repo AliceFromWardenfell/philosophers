@@ -6,7 +6,7 @@
 /*   By: alisa <alisa@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/03 02:41:07 by alisa             #+#    #+#             */
-/*   Updated: 2021/09/10 05:27:29 by alisa            ###   ########.fr       */
+/*   Updated: 2021/09/11 03:02:37 by alisa            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,9 +25,9 @@ void	init_mutexes(t_main *m)
 		pthread_mutex_init(&m->mutex_philo[i], NULL);
 		pthread_mutex_lock(&m->mutex_philo[i]);
 	}
-	m->mutex_ctrl = malloc(2 * sizeof(*m->mutex_ctrl));
+	m->mutex_ctrl = malloc(3 * sizeof(*m->mutex_ctrl));
 	i = -1;
-	while (++i < 2)
+	while (++i < 3)
 		pthread_mutex_init(&m->mutex_ctrl[i], NULL);
 }
 
@@ -70,21 +70,27 @@ int	main(void)
 	t_main			m;
 	int				i;
 
+	usleep(2000000);
 	initialization(&m);
 	doctors(&m);
 	philos_birth(&m);
 	waiter_birth(&m);
-	while (TRUE)
-		usleep(100);
+	usleep(5000000);
 	i = -1;
 	while (++i < m.info.num_of_philos)
 		pthread_mutex_destroy(&m.mutex_fork[i]);
+	i = -1;
+	while (++i < m.info.num_of_philos)
+		pthread_mutex_destroy(&m.mutex_philo[i]);
 	i = -1;
 	while (++i < 2)
 		pthread_mutex_destroy(&m.mutex_ctrl[i]);
 	i = -1;
 	while (++i < m.info.num_of_philos)
 		pthread_join(m.thread[i], NULL);
+	i = -1;
+	while (++i < m.info.num_of_pathologists)
+		pthread_join(m.pathologist[i], NULL);
 	// free(m.philo);
 	free(m.mutex_fork);
 	free(m.mutex_ctrl);

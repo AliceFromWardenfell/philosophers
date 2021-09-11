@@ -6,7 +6,7 @@
 /*   By: alisa <alisa@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/03 02:41:33 by alisa             #+#    #+#             */
-/*   Updated: 2021/09/10 05:26:55 by alisa            ###   ########.fr       */
+/*   Updated: 2021/09/11 03:11:42 by alisa            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,9 @@
 
 # define NAME 0
 # define MEAL 1
+# define ALIVE 2
 
+# define OK 0
 # define FALSE 0
 # define TRUE 1
 
@@ -67,7 +69,9 @@ typedef struct s_main
 void	philos_birth(t_main *m);
 void	waiter_birth(t_main *m);
 void	doctors(t_main *m);
-long	curr_timestamp(t_main *m, int philo_name);
+void	print_status(t_main *m, int philo_name, char *status);
+int		smb_died(t_main *m);
+int		unlock_all_philo(t_main *m);
 int		error(void);
 
 #endif
