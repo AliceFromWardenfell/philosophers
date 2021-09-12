@@ -6,7 +6,7 @@
 /*   By: alisa <alisa@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/03 02:41:07 by alisa             #+#    #+#             */
-/*   Updated: 2021/09/12 06:28:07 by alisa            ###   ########.fr       */
+/*   Updated: 2021/09/12 07:14:34 by alisa            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ void	allocations(t_main *m)
 void	initialization(t_main *m)
 {
 	m->info.num_of_philos = NUMBER_OF_PHILOSOPHERS;
-	m->info.time_to_die = TIME_TO_DIE * 1000;
+	m->info.time_to_die = TIME_TO_DIE;
 	m->info.time_to_eat = TIME_TO_EAT * 1000;
 	m->info.time_to_sleep = TIME_TO_SLEEP * 1000;
 	m->info.num_of_meals = NUMBER_OF_TIME_EACH_PHILOSOPHER_MUST_EAT;

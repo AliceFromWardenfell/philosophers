@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   philos_birth.c                                     :+:      :+:    :+:   */
+/*   philosophers.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: alisa <alisa@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/06 07:21:16 by alisa             #+#    #+#             */
-/*   Updated: 2021/09/12 06:22:21 by alisa            ###   ########.fr       */
+/*   Updated: 2021/09/12 07:33:00 by alisa            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,14 +43,13 @@ static int	philo_eats(t_main *m, int philo_name, int left, int right)
 			return (ERROR);
 	if (pthread_mutex_unlock(&m->mutex_ctrl[ALIVE]))
 		return (ERROR);
-	printf("num_of_finished_meals = %d\n", m->info.num_of_finished_meals);
+	printf("%d. last_meal = %ld\n", philo_name, m->philo[philo_name - 1].last_meal_time);
 	if (usleep(m->info.time_to_eat))
 		return (ERROR);
 	if (pthread_mutex_lock(&m->mutex_ctrl[MEAL]))
 		return (ERROR);
 	// printf("adding 1 to %d finished_meals\n", m->info.num_of_finished_meals);
 	m->info.num_of_finished_meals++;
-	printf("num_of_finished_meals = %d\n", m->info.num_of_finished_meals);
 	if (pthread_mutex_unlock(&m->mutex_ctrl[MEAL]))
 		return (ERROR);
 	// printf("%d has put %d fork\n", philo_name, right);
@@ -62,8 +61,11 @@ static int	philo_eats(t_main *m, int philo_name, int left, int right)
 	return (OK);
 }
 
-static int	philo_sleeps(t_main *m)
+static int	philo_sleeps(t_main *m, int philo_name)
 {
+	usleep(philo_name);
+	// if (print_status(m, philo_name, "is sleeping"))
+	// 	return (ERROR);
 	if (usleep(m->info.time_to_sleep))
 		return (ERROR);
 	return (OK);
@@ -93,7 +95,7 @@ void	*philo_life(void *arg)
 			printf("BYE from %d\n", philo_name);
 			return (NULL); //free here if smthing was alloced
 		}
-		if (philo_sleeps(m))
+		if (philo_sleeps(m, philo_name))
 			return (NULL);
 	}
 	return (NULL);

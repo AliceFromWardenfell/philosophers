@@ -6,7 +6,7 @@
 /*   By: alisa <alisa@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/10 02:13:28 by alisa             #+#    #+#             */
-/*   Updated: 2021/09/12 06:28:48 by alisa            ###   ########.fr       */
+/*   Updated: 2021/09/12 07:32:49 by alisa            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,11 +19,12 @@ static int	death_check(t_main *m, int philo_name)
 	timestamp = curr_timestamp(m, philo_name);
 	if (timestamp == -1)
 		return (ERROR);
-	if (timestamp - m->philo[philo_name].last_meal_time
+	if (timestamp - m->philo[philo_name - 1].last_meal_time
 		>= m->info.time_to_die)
 	{
+		printf("%d. last_meal = %ld\n", philo_name, m->philo[philo_name - 1].last_meal_time);
 		m->info.somebody_died = TRUE;
-		if (print_status(m, philo_name, "died"))
+		if (print_status(m, philo_name, "died")) //protect with ALIVE mutex
 			return (ERROR);
 		return (2);
 	}
@@ -53,6 +54,8 @@ void	*watch_for_deaths(void *arg)
 		while (++i < j)
 			if (death_check(m, i + 1))
 				return (NULL);
+		if (usleep(1000))
+			return (NULL);
 	}
 	return (NULL);
 }
