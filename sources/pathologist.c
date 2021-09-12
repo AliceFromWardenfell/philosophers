@@ -1,16 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   doctors.c                                          :+:      :+:    :+:   */
+/*   pathologist.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: alisa <alisa@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/10 02:13:28 by alisa             #+#    #+#             */
-/*   Updated: 2021/09/11 03:00:04 by alisa            ###   ########.fr       */
+/*   Updated: 2021/09/12 06:28:48 by alisa            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
+
+static int	death_check(t_main *m, int philo_name)
+{
+	long	timestamp;
+
+	timestamp = curr_timestamp(m, philo_name);
+	if (timestamp == -1)
+		return (ERROR);
+	if (timestamp - m->philo[philo_name].last_meal_time
+		>= m->info.time_to_die)
+	{
+		m->info.somebody_died = TRUE;
+		if (print_status(m, philo_name, "died"))
+			return (ERROR);
+		return (2);
+	}
+	return (0);
+}
 
 void	*watch_for_deaths(void *arg)
 {
@@ -20,9 +38,11 @@ void	*watch_for_deaths(void *arg)
 	int		i;
 
 	m = (t_main *)arg;
-	pthread_mutex_lock(&m->mutex_ctrl[NAME]);
+	if (pthread_mutex_lock(&m->mutex_ctrl[NAME]))
+		return (NULL);
 	pathologist_name = ++m->info.free_name_;
-	pthread_mutex_unlock(&m->mutex_ctrl[NAME]);
+	if (pthread_mutex_unlock(&m->mutex_ctrl[NAME]))
+		return (NULL);
 	printf("HI from pathologist %d!\n", pathologist_name);
 	while (TRUE)
 	{
@@ -31,25 +51,23 @@ void	*watch_for_deaths(void *arg)
 		if (m->info.num_of_philos < j)
 			j = m->info.num_of_philos;
 		while (++i < j)
-		{
-			usleep(3000000);
-			m->info.somebody_died = TRUE;
-			printf("BYE from pathologist %d!\n", pathologist_name);
-			return (NULL);
-		}
+			if (death_check(m, i + 1))
+				return (NULL);
 	}
 	return (NULL);
 }
 
-void	pathologist_birth(t_main *m)
+int	pathologist_birth(t_main *m)
 {
 	int		i;
 
 	i = -1;
 	while (++i < m->info.num_of_pathologists)
 	{
-		pthread_create(&m->pathologist[i], NULL, &watch_for_deaths, (void *)m);
+		if (pthread_create(&m->pathologist[i], NULL, &watch_for_deaths, (void *)m))
+			return (ERROR);
 	}
+	return (OK);
 }
 
 // void	nutritionist(t_main *m)
@@ -57,8 +75,8 @@ void	pathologist_birth(t_main *m)
 	
 // }
 
-void	doctors(t_main *m)
-{
-	pathologist_birth(m);
-	// nutritionist(m);
-}
+// void	doctors(t_main *m)
+// {
+// 	pathologist_birth(m);
+// 	// nutritionist(m);
+// }

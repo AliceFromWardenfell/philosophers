@@ -6,7 +6,7 @@
 /*   By: alisa <alisa@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/03 02:41:33 by alisa             #+#    #+#             */
-/*   Updated: 2021/09/11 03:30:52 by alisa            ###   ########.fr       */
+/*   Updated: 2021/09/12 06:17:39 by alisa            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,11 +18,13 @@
 # include <pthread.h>
 # include <unistd.h>
 # include <sys/time.h>
+# include <errno.h> //?
+# include <string.h> //?
 
-# define NUMBER_OF_PHILOSOPHERS 5
-# define TIME_TO_DIE 800
+# define NUMBER_OF_PHILOSOPHERS 4
+# define TIME_TO_DIE 100
 # define TIME_TO_EAT 200
-# define TIME_TO_SLEEP 200
+# define TIME_TO_SLEEP 100
 # define NUMBER_OF_TIME_EACH_PHILOSOPHER_MUST_EAT 7
 
 # define NAME 0
@@ -30,6 +32,7 @@
 # define ALIVE 2
 
 # define OK 0
+# define ERROR 1
 # define FALSE 0
 # define TRUE 1
 
@@ -66,12 +69,13 @@ typedef struct s_main
 	struct s_philo	*philo;
 }					t_main;
 
-void	philos_birth(t_main *m);
-void	waiter_birth(t_main *m);
-void	doctors(t_main *m);
-void	print_status(t_main *m, int philo_name, char *status);
+int		philos_birth(t_main *m);
+int		waiter_birth(t_main *m);
+int		pathologist_birth(t_main *m);
+int		print_status(t_main *m, int philo_name, char *status);
+long	curr_timestamp(t_main *m, int philo_name);
 int		smb_died(t_main *m);
 int		unlock_all_philo(t_main *m, int expected_amount_of_meals);
-int		error(void);
+int		error(t_main *m);
 
 #endif

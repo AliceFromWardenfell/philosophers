@@ -14,7 +14,7 @@ SRCS		:= main.c \
 			error.c \
 			philos_birth.c \
 			waiter.c \
-			doctors.c \
+			pathologist.c \
 			utils.c
 
 OBJS_DIR	:= .objects
