@@ -6,7 +6,7 @@
 /*   By: alisa <alisa@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/03 02:41:07 by alisa             #+#    #+#             */
-/*   Updated: 2021/09/12 07:47:56 by alisa            ###   ########.fr       */
+/*   Updated: 2021/09/12 11:09:02 by alisa            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void	init_mutexes(t_main *m)
 		pthread_mutex_lock(&m->mutex_philo[i]);
 	}
 	i = -1;
-	while (++i < 3)
+	while (++i < 4)
 	{
 		if (pthread_mutex_init(&m->mutex_ctrl[i], NULL))
 			printf("INIT_ERROR!\n");
@@ -37,7 +37,7 @@ void	allocations(t_main *m)
 
 	m->mutex_fork = malloc(m->info.num_of_philos * sizeof(*m->mutex_fork));
 	m->mutex_philo = malloc(m->info.num_of_philos * sizeof(*m->mutex_philo));
-	m->mutex_ctrl = malloc(3 * sizeof(*m->mutex_ctrl));
+	m->mutex_ctrl = malloc(4 * sizeof(*m->mutex_ctrl));
 	m->philo = malloc(m->info.num_of_philos * sizeof(*m->philo));
 	m->thread = malloc(m->info.num_of_philos * sizeof(*m->thread));
 	m->pathologist = malloc(m->info.num_of_pathologists * sizeof(pthread_t));
@@ -84,6 +84,7 @@ int	main(void)
 	pathologist_birth(&m);
 	philos_birth(&m);
 	waiter_birth(&m);
+	// nutritionist(&m);
 	// while (TRUE)
 	// 	usleep(1000000);
 	i = -1;

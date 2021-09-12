@@ -6,7 +6,7 @@
 /*   By: alisa <alisa@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/10 02:13:28 by alisa             #+#    #+#             */
-/*   Updated: 2021/09/12 07:53:27 by alisa            ###   ########.fr       */
+/*   Updated: 2021/09/12 11:18:16 by alisa            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,10 +23,16 @@ static int	death_check(t_main *m, int philo_name)
 		>= m->info.time_to_die)
 	{
 		printf("%d. last_meal = %ld\n", philo_name, m->philo[philo_name - 1].last_meal_time);
-		m->info.somebody_died = TRUE;
 		if (pthread_mutex_lock(&m->mutex_ctrl[ALIVE]))
 			return (ERROR);
-		if (print_status(m, philo_name, "died"))
+		m->info.somebody_died++;
+		if (m->info.somebody_died >= 2)
+		{
+			if (pthread_mutex_unlock(&m->mutex_ctrl[ALIVE]))
+				return (ERROR);
+			return (2);
+		}
+		if (print_status(m, philo_name, "\033[31mdied\033[0m"))
 			return (ERROR);
 		if (pthread_mutex_unlock(&m->mutex_ctrl[ALIVE]))
 			return (ERROR);
@@ -76,14 +82,3 @@ int	pathologist_birth(t_main *m)
 	}
 	return (OK);
 }
-
-// void	nutritionist(t_main *m)
-// {
-	
-// }
-
-// void	doctors(t_main *m)
-// {
-// 	pathologist_birth(m);
-// 	// nutritionist(m);
-// }

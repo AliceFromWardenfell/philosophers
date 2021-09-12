@@ -6,7 +6,7 @@
 /*   By: alisa <alisa@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/10 00:55:22 by alisa             #+#    #+#             */
-/*   Updated: 2021/09/12 08:36:29 by alisa            ###   ########.fr       */
+/*   Updated: 2021/09/12 10:50:43 by alisa            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ static int	allow_even_ones_to_eat(t_main *m)
 			{
 				if (pthread_mutex_unlock(&m->mutex_philo[i]))
 					return (ERROR);
-				printf("%d unlocked\n", i + 1);
+				// printf("%d unlocked\n", i + 1);
 				if (smb_died(m) == TRUE)
 				{
 					printf("BYE from waiter!\n");

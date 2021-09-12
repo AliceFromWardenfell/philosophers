@@ -6,7 +6,7 @@
 /*   By: alisa <alisa@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/10 03:58:34 by alisa             #+#    #+#             */
-/*   Updated: 2021/09/12 08:21:53 by alisa            ###   ########.fr       */
+/*   Updated: 2021/09/12 11:21:53 by alisa            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ int	print_status(t_main *m, int philo_name, char *status) //mb move
 	m->philo[philo_name - 1].last_meal_time = curr_timestamp(m, philo_name);
 	if (m->philo[philo_name - 1].last_meal_time == -1)
 		return (1);
-	printf("%05ld %d %s\n", m->philo[philo_name - 1].last_meal_time, philo_name, status);
+	printf("%05ld \033[1m%d\033[0m %s\n", m->philo[philo_name - 1].last_meal_time, philo_name, status);
 	return (0);
 }
 

@@ -15,6 +15,7 @@ SRCS		:= main.c \
 			philosophers.c \
 			waiter.c \
 			pathologist.c \
+			nutritionist.c \
 			utils.c
 
 OBJS_DIR	:= .objects

@@ -6,7 +6,7 @@
 /*   By: alisa <alisa@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/03 02:41:33 by alisa             #+#    #+#             */
-/*   Updated: 2021/09/12 08:41:22 by alisa            ###   ########.fr       */
+/*   Updated: 2021/09/12 11:23:02 by alisa            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,10 @@
 # include <errno.h> //?
 # include <string.h> //?
 
-# define NUMBER_OF_PHILOSOPHERS 4
-# define TIME_TO_DIE 402
-# define TIME_TO_EAT 200
-# define TIME_TO_SLEEP 200
+# define NUMBER_OF_PHILOSOPHERS 44
+# define TIME_TO_DIE 130
+# define TIME_TO_EAT 60
+# define TIME_TO_SLEEP 60
 # define NUMBER_OF_TIME_EACH_PHILOSOPHER_MUST_EAT 7
 
 # define NAME 0
@@ -72,6 +72,7 @@ typedef struct s_main
 int		philos_birth(t_main *m);
 int		waiter_birth(t_main *m);
 int		pathologist_birth(t_main *m);
+int		nutritionist(t_main *m);
 int		print_status(t_main *m, int philo_name, char *status);
 long	curr_timestamp(t_main *m, int philo_name);
 int		smb_died(t_main *m);
