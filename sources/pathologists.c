@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pathologist.c                                      :+:      :+:    :+:   */
+/*   pathologists.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: alisa <alisa@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/10 02:13:28 by alisa             #+#    #+#             */
-/*   Updated: 2021/09/12 11:18:16 by alisa            ###   ########.fr       */
+/*   Updated: 2021/09/12 13:17:30 by alisa            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ static int	death_check(t_main *m, int philo_name)
 			return (ERROR);
 		return (2);
 	}
-	return (0);
+	return (OK);
 }
 
 void	*watch_for_deaths(void *arg)
@@ -51,7 +51,7 @@ void	*watch_for_deaths(void *arg)
 	m = (t_main *)arg;
 	if (pthread_mutex_lock(&m->mutex_ctrl[NAME]))
 		return (NULL);
-	pathologist_name = ++m->info.free_name_;
+	pathologist_name = ++m->info.free_name_p;
 	if (pthread_mutex_unlock(&m->mutex_ctrl[NAME]))
 		return (NULL);
 	printf("HI from pathologist %d!\n", pathologist_name);
@@ -70,7 +70,7 @@ void	*watch_for_deaths(void *arg)
 	return (NULL);
 }
 
-int	pathologist_birth(t_main *m)
+int	pathologists_birth(t_main *m)
 {
 	int		i;
 

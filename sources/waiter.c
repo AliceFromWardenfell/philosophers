@@ -6,7 +6,7 @@
 /*   By: alisa <alisa@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/10 00:55:22 by alisa             #+#    #+#             */
-/*   Updated: 2021/09/12 10:50:43 by alisa            ###   ########.fr       */
+/*   Updated: 2021/09/12 13:34:31 by alisa            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ static int	allow_odd_ones_to_eat(t_main *m, int expected_amount_of_meals)
 
 	while (TRUE)
 	{
-		if (smb_died(m) == TRUE)
+		if (smb_died(m) == TRUE || all_full(m) == TRUE)
 		{
 			printf("BYE from waiter!\n");
 			return (unlock_all_philo(m, expected_amount_of_meals));
@@ -34,7 +34,7 @@ static int	allow_odd_ones_to_eat(t_main *m, int expected_amount_of_meals)
 				if (pthread_mutex_unlock(&m->mutex_philo[i]))
 					return (ERROR);
 				printf("%d unlocked\n", i + 1);
-				if (smb_died(m) == TRUE)
+				if (smb_died(m) == TRUE || all_full(m) == TRUE)
 				{
 					printf("BYE from waiter!\n");
 					return (unlock_all_philo(m, i / 2 + 1));
@@ -55,7 +55,7 @@ static int	allow_even_ones_to_eat(t_main *m)
 
 	while (TRUE)
 	{
-		if (smb_died(m) == TRUE)
+		if (smb_died(m) == TRUE || all_full(m) == TRUE)
 		{
 			printf("BYE from waiter!\n");
 			return (unlock_all_philo(m, m->info.num_of_philos / 2)); // need to wait for all to begin eating (to lock) before unlock
@@ -71,7 +71,7 @@ static int	allow_even_ones_to_eat(t_main *m)
 				if (pthread_mutex_unlock(&m->mutex_philo[i]))
 					return (ERROR);
 				// printf("%d unlocked\n", i + 1);
-				if (smb_died(m) == TRUE)
+				if (smb_died(m) == TRUE || all_full(m) == TRUE)
 				{
 					printf("BYE from waiter!\n");
 					return (unlock_all_philo(m, (i + 1) / 2)); // need to wait for all to begin eating (to lock) before unlock
@@ -95,7 +95,7 @@ static int	allow_last_one_to_eat(t_main *m)
 		// 	m->info.num_of_finished_meals = 0;
 		// 	break ;
 		// }
-		if (smb_died(m) == TRUE)
+		if (smb_died(m) == TRUE || all_full(m) == TRUE)
 		{
 			printf("BYE from waiter!\n");
 			return (unlock_all_philo(m, m->info.num_of_philos / 2));
@@ -107,10 +107,10 @@ static int	allow_last_one_to_eat(t_main *m)
 			if (pthread_mutex_unlock(&m->mutex_philo[m->info.num_of_philos - 1]))
 				return (ERROR);
 			printf("%d unlocked\n", m->info.num_of_philos);
-			if (smb_died(m) == TRUE)
+			if (smb_died(m) == TRUE || all_full(m) == TRUE)
 			{
 				printf("BYE from waiter!\n");
-				return (unlock_all_philo(m, 1)); // need to wait for all to begin eating (to lock) before unlock
+				return (unlock_all_philo(m, 1));
 			}
 			break ;
 		}

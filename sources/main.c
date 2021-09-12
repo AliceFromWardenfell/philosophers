@@ -6,7 +6,7 @@
 /*   By: alisa <alisa@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/03 02:41:07 by alisa             #+#    #+#             */
-/*   Updated: 2021/09/12 11:09:02 by alisa            ###   ########.fr       */
+/*   Updated: 2021/09/12 13:19:45 by alisa            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ void	allocations(t_main *m)
 	while (++i < m->info.num_of_philos)
 	{
 		m->philo[i].last_meal_time = 0;
+		m->philo[i].is_full = FALSE;
 		m->philo[i].curr_num_of_meals = 0;
 		gettimeofday(&m->philo[i].birth_time, NULL);
 	}
@@ -57,9 +58,12 @@ void	initialization(t_main *m)
 	m->info.time_to_eat = TIME_TO_EAT * 1000;
 	m->info.time_to_sleep = TIME_TO_SLEEP * 1000;
 	m->info.num_of_meals = NUMBER_OF_TIME_EACH_PHILOSOPHER_MUST_EAT;
+	m->info.num_of_full_philos = 0;
 	m->info.free_name = 0;
-	m->info.free_name_ = -1;
+	m->info.free_name_p = -1;
+	m->info.free_name_n = -1;
 	m->info.num_of_pathologists = m->info.num_of_philos / (20 + 1) + 1;
+	m->info.num_of_nutritionists = m->info.num_of_pathologists;
 	m->info.somebody_died = FALSE;
 	m->mutex_ctrl = NULL;
 	m->mutex_fork = NULL;
@@ -81,8 +85,9 @@ int	main(void)
 	int				i;
 
 	initialization(&m);
-	pathologist_birth(&m);
+	pathologists_birth(&m);
 	philos_birth(&m);
+	nutritionists_birth(&m);
 	waiter_birth(&m);
 	// nutritionist(&m);
 	// while (TRUE)

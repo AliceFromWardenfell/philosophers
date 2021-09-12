@@ -6,7 +6,7 @@
 /*   By: alisa <alisa@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/10 03:58:34 by alisa             #+#    #+#             */
-/*   Updated: 2021/09/12 11:21:53 by alisa            ###   ########.fr       */
+/*   Updated: 2021/09/12 13:16:17 by alisa            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,13 @@ int	unlock_all_philo(t_main *m, int expected_amount_of_meals)
 		usleep(1000);
 	}
 	return (2);
+}
+
+int	all_full(t_main *m)
+{
+	if (m->info.num_of_full_philos == m->info.num_of_philos)
+		return (TRUE);
+	return (FALSE);
 }
 
 int	smb_died(t_main *m)

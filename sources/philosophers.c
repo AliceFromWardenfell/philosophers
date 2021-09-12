@@ -6,7 +6,7 @@
 /*   By: alisa <alisa@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/06 07:21:16 by alisa             #+#    #+#             */
-/*   Updated: 2021/09/12 11:19:40 by alisa            ###   ########.fr       */
+/*   Updated: 2021/09/12 13:42:41 by alisa            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,14 +40,18 @@ static int	philo_eats(t_main *m, int philo_name, int left, int right)
 		return (ERROR);
 	// printf("adding 1 to %d finished_meals\n", m->info.num_of_finished_meals);
 	m->info.num_of_finished_meals++;
-	m->philo[philo_name - 1].curr_num_of_meals++;
 	if (pthread_mutex_unlock(&m->mutex_ctrl[MEAL]))
 		return (ERROR);
-	if (smb_died(m) == TRUE)
+	if (smb_died(m) == TRUE || all_full(m) == TRUE)
 		return (unlock_forks(m, left, right));
 	else
 		if (print_status(m, philo_name, "\033[33mis eating\033[0m"))
 			return (ERROR);
+	if (pthread_mutex_lock(&m->mutex_ctrl[DIET]))
+		return (ERROR);
+	m->philo[philo_name - 1].curr_num_of_meals++;
+	if (pthread_mutex_unlock(&m->mutex_ctrl[DIET]))
+		return (ERROR);
 	if (pthread_mutex_unlock(&m->mutex_ctrl[ALIVE]))
 		return (ERROR);
 	printf("%d. last_meal = %ld\n", philo_name, m->philo[philo_name - 1].last_meal_time);
