@@ -6,7 +6,7 @@
 /*   By: alisa <alisa@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/10 00:55:22 by alisa             #+#    #+#             */
-/*   Updated: 2021/09/12 06:45:03 by alisa            ###   ########.fr       */
+/*   Updated: 2021/09/12 08:36:29 by alisa            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ static int	allow_odd_ones_to_eat(t_main *m, int expected_amount_of_meals)
 				if (smb_died(m) == TRUE)
 				{
 					printf("BYE from waiter!\n");
-					return (unlock_all_philo(m, i / 2 + 1)); // need to wait for all to begin eating (to lock) before unlock
+					return (unlock_all_philo(m, i / 2 + 1));
 				}
 				i += 2;
 			}
@@ -70,6 +70,7 @@ static int	allow_even_ones_to_eat(t_main *m)
 			{
 				if (pthread_mutex_unlock(&m->mutex_philo[i]))
 					return (ERROR);
+				printf("%d unlocked\n", i + 1);
 				if (smb_died(m) == TRUE)
 				{
 					printf("BYE from waiter!\n");
@@ -105,6 +106,7 @@ static int	allow_last_one_to_eat(t_main *m)
 			m->info.num_of_finished_meals = 0;
 			if (pthread_mutex_unlock(&m->mutex_philo[m->info.num_of_philos - 1]))
 				return (ERROR);
+			printf("%d unlocked\n", m->info.num_of_philos);
 			if (smb_died(m) == TRUE)
 			{
 				printf("BYE from waiter!\n");

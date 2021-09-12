@@ -6,7 +6,7 @@
 /*   By: alisa <alisa@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/10 03:58:34 by alisa             #+#    #+#             */
-/*   Updated: 2021/09/12 07:28:41 by alisa            ###   ########.fr       */
+/*   Updated: 2021/09/12 08:21:53 by alisa            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,11 +46,15 @@ int	unlock_all_philo(t_main *m, int expected_amount_of_meals)
 	i = -1;
 	while (TRUE)
 	{
+		printf("%d %d\n", m->info.num_of_finished_meals, expected_amount_of_meals);
 		if (m->info.num_of_finished_meals == expected_amount_of_meals)
 		{
 			while (++i < m->info.num_of_philos)
+			{
 				if (pthread_mutex_unlock(&m->mutex_philo[i]))
 					return (ERROR);
+				printf("last_unlock: %d.\n", i + 1);
+			}
 			break ;
 		}
 		usleep(1000);

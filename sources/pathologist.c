@@ -6,7 +6,7 @@
 /*   By: alisa <alisa@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/10 02:13:28 by alisa             #+#    #+#             */
-/*   Updated: 2021/09/12 07:32:49 by alisa            ###   ########.fr       */
+/*   Updated: 2021/09/12 07:53:27 by alisa            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,11 @@ static int	death_check(t_main *m, int philo_name)
 	{
 		printf("%d. last_meal = %ld\n", philo_name, m->philo[philo_name - 1].last_meal_time);
 		m->info.somebody_died = TRUE;
-		if (print_status(m, philo_name, "died")) //protect with ALIVE mutex
+		if (pthread_mutex_lock(&m->mutex_ctrl[ALIVE]))
+			return (ERROR);
+		if (print_status(m, philo_name, "died"))
+			return (ERROR);
+		if (pthread_mutex_unlock(&m->mutex_ctrl[ALIVE]))
 			return (ERROR);
 		return (2);
 	}

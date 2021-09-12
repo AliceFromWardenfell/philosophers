@@ -6,7 +6,7 @@
 /*   By: alisa <alisa@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/03 02:41:33 by alisa             #+#    #+#             */
-/*   Updated: 2021/09/12 07:30:57 by alisa            ###   ########.fr       */
+/*   Updated: 2021/09/12 08:41:22 by alisa            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@
 # include <string.h> //?
 
 # define NUMBER_OF_PHILOSOPHERS 4
-# define TIME_TO_DIE 310
+# define TIME_TO_DIE 402
 # define TIME_TO_EAT 200
 # define TIME_TO_SLEEP 200
 # define NUMBER_OF_TIME_EACH_PHILOSOPHER_MUST_EAT 7
