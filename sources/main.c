@@ -6,7 +6,7 @@
 /*   By: alisa <alisa@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/03 02:41:07 by alisa             #+#    #+#             */
-/*   Updated: 2021/09/13 13:16:25 by alisa            ###   ########.fr       */
+/*   Updated: 2021/09/13 13:38:56 by alisa            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ int	initialization(t_main *m)
 	m->mutex_philo = NULL;
 	m->pathologist = NULL;
 	m->nutritionist = NULL;
-	m->philo =  NULL;
+	m->philo = NULL;
 	m->thread = NULL;
 	if (m->info.num_of_philos % 2 == 0)
 		m->info.num_of_finished_meals = m->info.num_of_philos / 2;
@@ -87,7 +87,7 @@ int	initialization(t_main *m)
 	return (OK);
 }
 
-int	main(int argc, char **argv) // check error cases for leaks
+int	main(int argc, char **argv)
 {
 	t_main			m;
 
@@ -104,7 +104,6 @@ int	main(int argc, char **argv) // check error cases for leaks
 			return (ERROR);
 	if (waiter_birth(&m))
 		return (ERROR);
-	
 	wait_threads(&m);
 	destroy_mutexes(&m);
 	mem_free(&m);

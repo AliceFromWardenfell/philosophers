@@ -6,7 +6,7 @@
 /*   By: alisa <alisa@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/12 10:42:29 by alisa             #+#    #+#             */
-/*   Updated: 2021/09/13 13:28:42 by alisa            ###   ########.fr       */
+/*   Updated: 2021/09/13 13:38:41 by alisa            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,13 +18,13 @@ static int	check_nutrition(t_main *m, int i)
 		return (critical_exit(m));
 	if (smb_died(m) == TRUE)
 		return (2);
-	if (m->philo[i].curr_num_of_meals >= m->info.num_of_meals && m->philo[i].is_full == FALSE)
+	if (m->philo[i].curr_num_of_meals >= m->info.num_of_meals
+		&& m->philo[i].is_full == FALSE)
 	{
 		m->philo[i].is_full = TRUE;
 		m->info.num_of_full_philos++;
 		if (all_full(m) == TRUE)
 		{
-			// printf("BYE from nutritionist!\n");
 			if (pthread_mutex_unlock(&m->mutex_ctrl[DIET]))
 				return (critical_exit(m));
 			return (2);
@@ -48,7 +48,6 @@ static void	*watch_for_diet(void *arg)
 	nutritionist_name = ++m->info.free_name_n;
 	if (pthread_mutex_unlock(&m->mutex_ctrl[NAME]))
 		return (critical_exit_v(m));
-	// printf("HI from nutritionist %d!\n", nutritionist_name);
 	while (TRUE)
 	{
 		i = nutritionist_name * 20 - 1;
@@ -71,7 +70,8 @@ int	nutritionists_birth(t_main *m)
 	i = -1;
 	while (++i < m->info.num_of_pathologists)
 	{
-		if (pthread_create(&m->nutritionist[i], NULL, &watch_for_diet, (void *)m))
+		if (pthread_create(&m->nutritionist[i], NULL,
+				&watch_for_diet, (void *)m))
 			return (critical_exit(m));
 	}
 	return (OK);

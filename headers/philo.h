@@ -6,7 +6,7 @@
 /*   By: alisa <alisa@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/03 02:41:33 by alisa             #+#    #+#             */
-/*   Updated: 2021/09/13 13:27:36 by alisa            ###   ########.fr       */
+/*   Updated: 2021/09/13 13:39:26 by alisa            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,6 @@
 # include <pthread.h>
 # include <unistd.h>
 # include <sys/time.h>
-# include <errno.h> //?
-# include <string.h> //?
 
 # define NAME 0
 # define MEAL 1
@@ -71,24 +69,24 @@ typedef struct s_main
 	struct s_philo	*philo;
 }					t_main;
 
-int		parser(t_main *m, int argc, char **argv);
-int		philosophers_birth(t_main *m);
-int		philo_eats(t_main *m, int philo_name, int left, int right);
-int		waiter_birth(t_main *m);
-int		pathologists_birth(t_main *m);
-int		nutritionists_birth(t_main *m);
-int		print_status(t_main *m, int philo_name, char *status, int flag);
-long	curr_timestamp(t_main *m, int philo_name);
-int		smb_died(t_main *m);
-int		all_full(t_main *m);
-int		unlock_all_philo(t_main *m, int expected_amount_of_meals);
-int		wait_threads(t_main *m);
-int		destroy_mutexes(t_main *m);
-void	mem_free(t_main *m);
-int		print_error(char *str);
-int		error_exit(t_main *m);
-int		critical_exit(t_main *m);
-void	*critical_exit_v(t_main *m);
+int			parser(t_main *m, int argc, char **argv);
+int			philosophers_birth(t_main *m);
+int			philo_eats(t_main *m, int philo_name, int left, int right);
+int			waiter_birth(t_main *m);
+int			pathologists_birth(t_main *m);
+int			nutritionists_birth(t_main *m);
+int			print_status(t_main *m, int philo_name, char *status, int flag);
+long		curr_timestamp(t_main *m, int philo_name);
+int			smb_died(t_main *m);
+int			all_full(t_main *m);
+int			unlock_all_philo(t_main *m, int expected_amount_of_meals);
+int			wait_threads(t_main *m);
+int			destroy_mutexes(t_main *m);
+void		mem_free(t_main *m);
+int			print_error(char *str);
+int			error_exit(t_main *m);
+int			critical_exit(t_main *m);
+void		*critical_exit_v(t_main *m);
 long int	ft_atoi(const char *str);
 
 #endif

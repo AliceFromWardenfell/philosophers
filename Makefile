@@ -19,6 +19,7 @@ SRCS		:= main.c \
 			nutritionists.c \
 			exit.c \
 			utils.c \
+			clean.c \
 			ft_atoi.c
 
 OBJS_DIR	:= .objects
