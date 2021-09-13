@@ -13,6 +13,7 @@ INCLUDES	:= -I$(HDRS_DIR)
 SRCS		:= main.c \
 			parser.c \
 			philosophers.c \
+			dinner.c \
 			waiter.c \
 			pathologists.c \
 			nutritionists.c \

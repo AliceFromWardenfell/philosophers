@@ -6,7 +6,7 @@
 /*   By: alisa <alisa@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/03 02:41:33 by alisa             #+#    #+#             */
-/*   Updated: 2021/09/13 12:45:17 by alisa            ###   ########.fr       */
+/*   Updated: 2021/09/13 13:27:36 by alisa            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,7 @@ typedef struct s_main
 
 int		parser(t_main *m, int argc, char **argv);
 int		philosophers_birth(t_main *m);
+int		philo_eats(t_main *m, int philo_name, int left, int right);
 int		waiter_birth(t_main *m);
 int		pathologists_birth(t_main *m);
 int		nutritionists_birth(t_main *m);
