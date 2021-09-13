@@ -6,7 +6,7 @@
 /*   By: alisa <alisa@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/13 13:26:08 by alisa             #+#    #+#             */
-/*   Updated: 2021/09/13 13:27:43 by alisa            ###   ########.fr       */
+/*   Updated: 2021/09/13 13:29:06 by alisa            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ static int	unlock_forks(t_main *m, int left, int right)
 	return (2);
 }
 
-static int add_meal(t_main *m)
+static int	add_meal(t_main *m)
 {
 	if (pthread_mutex_lock(&m->mutex_ctrl[MEAL]))
 		return (critical_exit(m));
@@ -33,7 +33,7 @@ static int add_meal(t_main *m)
 	return (OK);
 }
 
-static int add_global_meal(t_main *m, int philo_name)
+static int	add_global_meal(t_main *m, int philo_name)
 {
 	if (pthread_mutex_lock(&m->mutex_ctrl[DIET]))
 		return (critical_exit(m));
