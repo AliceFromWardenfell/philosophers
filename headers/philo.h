@@ -6,7 +6,7 @@
 /*   By: alisa <alisa@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/03 02:41:33 by alisa             #+#    #+#             */
-/*   Updated: 2021/09/13 05:48:14 by alisa            ###   ########.fr       */
+/*   Updated: 2021/09/13 06:58:52 by alisa            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,13 +23,15 @@
 
 # define NAME 0
 # define MEAL 1
-# define ALIVE 2
-# define DIET 3
+# define DIET 2
+# define ALIVE 3
 
 # define OK 0
 # define ERROR 1
 # define FALSE 0
 # define TRUE 1
+# define EAT 1
+# define NOT_EAT 0
 
 typedef struct s_info
 {
@@ -74,7 +76,7 @@ int		philosophers_birth(t_main *m);
 int		waiter_birth(t_main *m);
 int		pathologists_birth(t_main *m);
 int		nutritionists_birth(t_main *m);
-int		print_status(t_main *m, int philo_name, char *status);
+int		print_status(t_main *m, int philo_name, char *status, int flag);
 long	curr_timestamp(t_main *m, int philo_name);
 int		smb_died(t_main *m);
 int		all_full(t_main *m);

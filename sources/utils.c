@@ -6,7 +6,7 @@
 /*   By: alisa <alisa@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/10 03:58:34 by alisa             #+#    #+#             */
-/*   Updated: 2021/09/13 03:24:29 by alisa            ###   ########.fr       */
+/*   Updated: 2021/09/13 07:46:08 by alisa            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,13 +29,17 @@ long	curr_timestamp(t_main *m, int philo_name)
 	return (timestamp / 1000);
 }
 
-int	print_status(t_main *m, int philo_name, char *status) //mb move
+int	print_status(t_main *m, int philo_name, char *status, int flag) //mb move
 {
-	printf("%d. old_last_meal = %ld\n", philo_name, m->philo[philo_name - 1].last_meal_time);
-	m->philo[philo_name - 1].last_meal_time = curr_timestamp(m, philo_name);
-	if (m->philo[philo_name - 1].last_meal_time == -1)
-		return (1);
-	printf("%05ld \033[1m%d\033[0m %s\n", m->philo[philo_name - 1].last_meal_time, philo_name, status);
+	long	timestamp;
+	// printf("%d. old_last_meal = %ld\n", philo_name, m->philo[philo_name - 1].last_meal_time);
+	timestamp = curr_timestamp(m, philo_name);
+	if (timestamp == -1)
+			return (1);
+	if (flag == EAT)
+		m->philo[philo_name - 1].last_meal_time = timestamp;
+	printf("%05ld \033[1m%d\033[0m %s\n", timestamp, philo_name, status);
+	
 	return (0);
 }
 
@@ -53,7 +57,7 @@ int	unlock_all_philo(t_main *m, int expected_amount_of_meals)
 			{
 				if (pthread_mutex_unlock(&m->mutex_philo[i]))
 					return (ERROR);
-				printf("last_unlock: %d.\n", i + 1);
+				// printf("last_unlock: %d.\n", i + 1);
 			}
 			break ;
 		}

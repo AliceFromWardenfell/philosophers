@@ -6,7 +6,7 @@
 /*   By: alisa <alisa@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/10 02:13:28 by alisa             #+#    #+#             */
-/*   Updated: 2021/09/13 06:04:08 by alisa            ###   ########.fr       */
+/*   Updated: 2021/09/13 07:42:24 by alisa            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,10 +32,11 @@ static int	death_check(t_main *m, int philo_name)
 				return (ERROR);
 			return (2);
 		}
-		if (print_status(m, philo_name, "\033[31mdied\033[0m"))
+		if (print_status(m, philo_name, "\033[31mdied\033[0m", NOT_EAT))
 			return (ERROR);
 		if (pthread_mutex_unlock(&m->mutex_ctrl[ALIVE]))
 			return (ERROR);
+		// printf("BYE from pathologist\n");
 		return (2);
 	}
 	return (OK);
@@ -54,7 +55,7 @@ void	*watch_for_deaths(void *arg)
 	pathologist_name = ++m->info.free_name_p;
 	if (pthread_mutex_unlock(&m->mutex_ctrl[NAME]))
 		return (NULL);
-	printf("HI from pathologist %d!\n", pathologist_name);
+	// printf("HI from pathologist %d!\n", pathologist_name);
 	while (TRUE)
 	{
 		i = pathologist_name * 20 - 1;

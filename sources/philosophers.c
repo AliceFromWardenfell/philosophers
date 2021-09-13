@@ -6,7 +6,7 @@
 /*   By: alisa <alisa@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/06 07:21:16 by alisa             #+#    #+#             */
-/*   Updated: 2021/09/13 06:15:35 by alisa            ###   ########.fr       */
+/*   Updated: 2021/09/13 07:43:05 by alisa            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ int	unlock_forks(t_main *m, int left, int right)
 
 static int	philo_eats(t_main *m, int philo_name, int left, int right)
 {	
-	printf("%d waiting for permision to eat\n", philo_name);
+	// printf("%d waiting for permision to eat\n", philo_name);
 	if (pthread_mutex_lock(&m->mutex_philo[philo_name - 1]))
 		return (ERROR);
 	if (pthread_mutex_lock(&m->mutex_fork[right]))
@@ -45,7 +45,7 @@ static int	philo_eats(t_main *m, int philo_name, int left, int right)
 	if (smb_died(m) == TRUE || all_full(m) == TRUE)
 		return (unlock_forks(m, left, right));
 	else
-		if (print_status(m, philo_name, "\033[33mis eating\033[0m"))
+		if (print_status(m, philo_name, "\033[33mis eating\033[0m", EAT))
 			return (ERROR);
 	if (pthread_mutex_lock(&m->mutex_ctrl[DIET]))
 		return (ERROR);
@@ -68,10 +68,26 @@ static int	philo_eats(t_main *m, int philo_name, int left, int right)
 
 static int	philo_sleeps(t_main *m, int philo_name)
 {
-	usleep(philo_name);
-	// if (print_status(m, philo_name, "is sleeping"))
-	// 	return (ERROR);
+	if (pthread_mutex_lock(&m->mutex_ctrl[ALIVE]))
+		return (ERROR);
+	if (!(smb_died(m) == TRUE || all_full(m) == TRUE))
+		if (print_status(m, philo_name, "is sleeping", NOT_EAT))
+			return (ERROR);
+	if (pthread_mutex_unlock(&m->mutex_ctrl[ALIVE]))
+		return (ERROR);
 	if (usleep(m->info.time_to_sleep))
+		return (ERROR);
+	return (OK);
+}
+
+static int	philo_thinks(t_main *m, int philo_name)
+{
+	if (pthread_mutex_lock(&m->mutex_ctrl[ALIVE]))
+		return (ERROR);
+	if (!(smb_died(m) == TRUE || all_full(m) == TRUE))
+		if (print_status(m, philo_name, "is thinking", NOT_EAT))
+			return (ERROR);
+	if (pthread_mutex_unlock(&m->mutex_ctrl[ALIVE]))
 		return (ERROR);
 	return (OK);
 }
@@ -97,11 +113,19 @@ void	*philo_life(void *arg)
 	{
 		if (philo_eats(m, philo_name, left, right))
 		{
-			printf("BYE from %d\n", philo_name);
+			// printf("E: BYE from %d\n", philo_name);
 			return (NULL); //free here if smthing was alloced
 		}
 		if (philo_sleeps(m, philo_name))
+		{
+			// printf("S: BYE from %d\n", philo_name);
 			return (NULL);
+		}
+		if (philo_thinks(m, philo_name))
+		{
+			// printf("T: BYE from %d\n", philo_name);
+			return (NULL);
+		}
 	}
 	return (NULL);
 }

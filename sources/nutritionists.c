@@ -6,7 +6,7 @@
 /*   By: alisa <alisa@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/12 10:42:29 by alisa             #+#    #+#             */
-/*   Updated: 2021/09/13 06:00:15 by alisa            ###   ########.fr       */
+/*   Updated: 2021/09/13 07:42:16 by alisa            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ static int	check_nutrition(t_main *m, int i)
 		m->info.num_of_full_philos++;
 		if (all_full(m) == TRUE)
 		{
-			printf("BYE from nutritionist!\n");
+			// printf("BYE from nutritionist!\n");
 			if (pthread_mutex_unlock(&m->mutex_ctrl[DIET]))
 				return (ERROR);
 			return (2);
@@ -48,7 +48,7 @@ static void	*watch_for_diet(void *arg)
 	nutritionist_name = ++m->info.free_name_n;
 	if (pthread_mutex_unlock(&m->mutex_ctrl[NAME]))
 		return (NULL);
-	printf("HI from nutritionist %d!\n", nutritionist_name);
+	// printf("HI from nutritionist %d!\n", nutritionist_name);
 	while (TRUE)
 	{
 		i = nutritionist_name * 20 - 1;

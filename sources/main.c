@@ -6,7 +6,7 @@
 /*   By: alisa <alisa@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/03 02:41:07 by alisa             #+#    #+#             */
-/*   Updated: 2021/09/13 04:52:03 by alisa            ###   ########.fr       */
+/*   Updated: 2021/09/13 06:49:21 by alisa            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ void	initialization(t_main *m)
 	init_mutexes(m);
 }
 
-int	main(int argc, char **argv) // check error cases on leaks
+int	main(int argc, char **argv) // check error cases for leaks
 {
 	t_main			m;
 
