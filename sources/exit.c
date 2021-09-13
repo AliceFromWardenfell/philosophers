@@ -6,11 +6,47 @@
 /*   By: alisa <alisa@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/06 07:16:13 by alisa             #+#    #+#             */
-/*   Updated: 2021/09/13 06:58:49 by alisa            ###   ########.fr       */
+/*   Updated: 2021/09/13 13:14:40 by alisa            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
+
+int	critical_exit(t_main *m)
+{
+	int				i;
+
+	i = -1;
+	while (++i < m->info.num_of_philos)
+		pthread_detach(m->thread[i]);
+	i = -1;
+	while (++i < m->info.num_of_pathologists)
+	{
+		pthread_detach(m->pathologist[i]);
+		if (m->info.num_of_meals != -1)
+			pthread_detach(m->nutritionist[i]);
+	}
+	pthread_detach(m->waiter);
+	return (ERROR);
+}
+
+void	*critical_exit_v(t_main *m)
+{
+	int				i;
+
+	i = -1;
+	while (++i < m->info.num_of_philos)
+		pthread_detach(m->thread[i]);
+	i = -1;
+	while (++i < m->info.num_of_pathologists)
+	{
+		pthread_detach(m->pathologist[i]);
+		if (m->info.num_of_meals != -1)
+			pthread_detach(m->nutritionist[i]);
+	}
+	pthread_detach(m->waiter);
+	return (NULL);
+}
 
 int	error_exit(t_main *m)
 {
@@ -30,31 +66,38 @@ int	wait_threads(t_main *m)
 
 	i = -1;
 	while (++i < m->info.num_of_philos)
-		pthread_join(m->thread[i], NULL);
+		if (pthread_join(m->thread[i], NULL))
+			return (ERROR);
 	i = -1;
 	while (++i < m->info.num_of_pathologists)
 	{
-		pthread_join(m->pathologist[i], NULL);
+		if (pthread_join(m->pathologist[i], NULL))
+			return (ERROR);
 		if (m->info.num_of_meals != -1)
-			pthread_join(m->nutritionist[i], NULL);
+			if (pthread_join(m->nutritionist[i], NULL))
+				return (ERROR);
 	}
-	pthread_join(m->waiter, NULL);
+	if (pthread_join(m->waiter, NULL))
+		return (ERROR);
 	return (OK);
 }
 
-int		destroy_mutexes(t_main *m)
+int	destroy_mutexes(t_main *m)
 {
 	int	i;
 
 	i = -1;
 	while (++i < m->info.num_of_philos)
 	{
-		pthread_mutex_destroy(&m->mutex_fork[i]);
-		pthread_mutex_destroy(&m->mutex_philo[i]);
+		if (pthread_mutex_destroy(&m->mutex_fork[i]))
+			return (ERROR);
+		if (pthread_mutex_destroy(&m->mutex_philo[i]))
+			return (ERROR);
 	}
 	i = -1;
 	while (++i < 4)
-		pthread_mutex_destroy(&m->mutex_ctrl[i]);
+		if (pthread_mutex_destroy(&m->mutex_ctrl[i]))
+			return (ERROR);
 	return (OK);
 }
 

@@ -6,7 +6,7 @@
 /*   By: alisa <alisa@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/13 03:53:59 by alisa             #+#    #+#             */
-/*   Updated: 2021/09/13 06:44:22 by alisa            ###   ########.fr       */
+/*   Updated: 2021/09/13 12:26:47 by alisa            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,18 +34,18 @@ static int	check_numbers(int argc, char **argv)
 	return (OK);
 }
 
-static int	check_values(t_main *m) // handle MAX_INT
+static int	check_values(t_main *m)
 {
-	if (m->info.num_of_philos < 1 || m->info.num_of_philos > 200)
+	if (m->info.num_of_philos < 1 || m->info.num_of_philos > 9999)
 		return (print_error("wrong number of philosophers"));
-	if (m->info.time_to_die < 60 || m->info.time_to_die > 10000)
+	if (m->info.time_to_die < 10 || m->info.time_to_die > 10000)
 		return (print_error("wrong time to die"));
-	if (m->info.time_to_eat < 60 || m->info.time_to_eat > 10000)
+	if (m->info.time_to_eat < 1 || m->info.time_to_eat > 5000)
 		return (print_error("wrong time to eat"));
-	if (m->info.time_to_sleep < 60 || m->info.time_to_sleep > 10000)
+	if (m->info.time_to_sleep < 1 || m->info.time_to_sleep > 5000)
 		return (print_error("wrong time to sleep"));
 	if (m->info.num_of_meals != -1
-		&& (m->info.num_of_meals < 1 || m->info.num_of_meals > 1000))
+		&& (m->info.num_of_meals < 1 || m->info.num_of_meals > 10000))
 		return (print_error("wrong number of meals"));
 	m->info.time_to_eat *= 1000;
 	m->info.time_to_sleep *= 1000;

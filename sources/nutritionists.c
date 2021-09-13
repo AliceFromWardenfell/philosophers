@@ -6,7 +6,7 @@
 /*   By: alisa <alisa@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/12 10:42:29 by alisa             #+#    #+#             */
-/*   Updated: 2021/09/13 07:42:16 by alisa            ###   ########.fr       */
+/*   Updated: 2021/09/13 12:24:56 by alisa            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 static int	check_nutrition(t_main *m, int i)
 {
 	if (pthread_mutex_lock(&m->mutex_ctrl[DIET]))
-		return (ERROR);
+		return (critical_exit(m));
 	if (smb_died(m) == TRUE)
 		return (2);
 	if (m->philo[i].curr_num_of_meals >= m->info.num_of_meals && m->philo[i].is_full == FALSE)
@@ -26,12 +26,12 @@ static int	check_nutrition(t_main *m, int i)
 		{
 			// printf("BYE from nutritionist!\n");
 			if (pthread_mutex_unlock(&m->mutex_ctrl[DIET]))
-				return (ERROR);
+				return (critical_exit(m));
 			return (2);
 		}
 	}
 	if (pthread_mutex_unlock(&m->mutex_ctrl[DIET]))
-		return (ERROR);
+		return (critical_exit(m));
 	return (OK);
 }
 
@@ -44,10 +44,10 @@ static void	*watch_for_diet(void *arg)
 
 	m = (t_main *)arg;
 	if (pthread_mutex_lock(&m->mutex_ctrl[NAME]))
-		return (NULL);
+		return (critical_exit_v(m));
 	nutritionist_name = ++m->info.free_name_n;
 	if (pthread_mutex_unlock(&m->mutex_ctrl[NAME]))
-		return (NULL);
+		return (critical_exit_v(m));
 	// printf("HI from nutritionist %d!\n", nutritionist_name);
 	while (TRUE)
 	{
@@ -59,7 +59,7 @@ static void	*watch_for_diet(void *arg)
 			if (check_nutrition(m, i))
 				return (NULL);
 		if (usleep(100))
-			return (NULL);
+			return (critical_exit_v(m));
 	}
 	return (NULL);
 }
@@ -72,7 +72,7 @@ int	nutritionists_birth(t_main *m)
 	while (++i < m->info.num_of_pathologists)
 	{
 		if (pthread_create(&m->nutritionist[i], NULL, &watch_for_diet, (void *)m))
-			return (ERROR);
+			return (critical_exit(m));
 	}
 	return (OK);
 }

@@ -6,7 +6,7 @@
 /*   By: alisa <alisa@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/10 00:55:22 by alisa             #+#    #+#             */
-/*   Updated: 2021/09/13 07:42:35 by alisa            ###   ########.fr       */
+/*   Updated: 2021/09/13 12:46:52 by alisa            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ static int	allow_odd_ones_to_eat(t_main *m, int expected_amount_of_meals)
 			while (i < m->info.num_of_philos - 1)
 			{
 				if (pthread_mutex_unlock(&m->mutex_philo[i]))
-					return (ERROR);
+					return (critical_exit(m));
 				// printf("%d unlocked\n", i + 1);
 				if (smb_died(m) == TRUE || all_full(m) == TRUE)
 				{
@@ -44,7 +44,7 @@ static int	allow_odd_ones_to_eat(t_main *m, int expected_amount_of_meals)
 			break ;
 		}
 		if (usleep(100))
-			return (ERROR);
+			return (critical_exit(m));
 	}
 	return (OK);
 }
@@ -69,7 +69,7 @@ static int	allow_even_ones_to_eat(t_main *m)
 			while (i <= m->info.num_of_philos - 1)
 			{
 				if (pthread_mutex_unlock(&m->mutex_philo[i]))
-					return (ERROR);
+					return (critical_exit(m));
 				// printf("%d unlocked\n", i + 1);
 				if (smb_died(m) == TRUE || all_full(m) == TRUE)
 				{
@@ -81,7 +81,7 @@ static int	allow_even_ones_to_eat(t_main *m)
 			break ;
 		}
 		if (usleep(100))
-			return (ERROR);
+			return (critical_exit(m));
 	}
 	return (OK);
 }
@@ -90,6 +90,7 @@ static int	allow_last_one_to_eat(t_main *m)
 {
 	while (TRUE)
 	{
+		// printf("even: m->info.num_of_philos / 2 = %d; m->info.num_of_finished_meals = %d\n", m->info.num_of_philos / 2, m->info.num_of_finished_meals);
 		if (smb_died(m) == TRUE || all_full(m) == TRUE)
 		{
 			// printf("BYE from waiter!\n");
@@ -100,7 +101,7 @@ static int	allow_last_one_to_eat(t_main *m)
 			// printf("the last one...\n");
 			m->info.num_of_finished_meals = 0;
 			if (pthread_mutex_unlock(&m->mutex_philo[m->info.num_of_philos - 1]))
-				return (ERROR);
+				return (critical_exit(m));
 			// printf("%d unlocked\n", m->info.num_of_philos);
 			if (smb_died(m) == TRUE || all_full(m) == TRUE)
 			{
@@ -110,7 +111,7 @@ static int	allow_last_one_to_eat(t_main *m)
 			break ;
 		}
 		if (usleep(100))
-			return (ERROR);
+			return (critical_exit(m));
 	}
 	return (OK);
 }
@@ -125,6 +126,12 @@ static void	*waiter(void *arg)
 		expected_amount_of_meals = m->info.num_of_philos / 2;
 	else
 		expected_amount_of_meals = 1;
+	if (m->info.num_of_philos == 1)
+	{
+		if (pthread_mutex_unlock(&m->mutex_philo[0]))
+			return (critical_exit_v(m));
+		return (NULL);
+	}
 	while (TRUE)
 	{
 		if (allow_odd_ones_to_eat(m, expected_amount_of_meals))
@@ -141,6 +148,6 @@ static void	*waiter(void *arg)
 int	waiter_birth(t_main *m)
 {
 	if (pthread_create(&m->waiter, NULL, &waiter, (void *)m))
-		return (ERROR);
+		return (critical_exit(m));
 	return (OK);
 }

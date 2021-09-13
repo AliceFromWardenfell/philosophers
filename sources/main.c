@@ -6,32 +6,34 @@
 /*   By: alisa <alisa@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/03 02:41:07 by alisa             #+#    #+#             */
-/*   Updated: 2021/09/13 06:49:21 by alisa            ###   ########.fr       */
+/*   Updated: 2021/09/13 13:15:41 by alisa            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-void	init_mutexes(t_main *m)
+static int	init_mutexes(t_main *m)
 {
 	int				i;
 
 	i = -1;
 	while (++i < m->info.num_of_philos)
 	{
-		pthread_mutex_init(&m->mutex_fork[i], NULL);
-		pthread_mutex_init(&m->mutex_philo[i], NULL);
-		pthread_mutex_lock(&m->mutex_philo[i]);
+		if (pthread_mutex_init(&m->mutex_fork[i], NULL))
+			return (error_exit(m));
+		if (pthread_mutex_init(&m->mutex_philo[i], NULL))
+			return (error_exit(m));
+		if (pthread_mutex_lock(&m->mutex_philo[i]))
+			return (error_exit(m));
 	}
 	i = -1;
 	while (++i < 4)
-	{
 		if (pthread_mutex_init(&m->mutex_ctrl[i], NULL))
-			printf("INIT_ERROR!\n");
-	}
+			return (error_exit(m));
+	return (OK);
 }
 
-void	allocations(t_main *m)
+static int	allocations(t_main *m)
 {
 	int	i;
 
@@ -42,17 +44,23 @@ void	allocations(t_main *m)
 	m->thread = malloc(m->info.num_of_philos * sizeof(*m->thread));
 	m->pathologist = malloc(m->info.num_of_pathologists * sizeof(pthread_t));
 	m->nutritionist = malloc(m->info.num_of_nutritionists * sizeof(pthread_t));
+	if (m->mutex_fork == NULL || m->mutex_philo == NULL
+		|| m->mutex_ctrl == NULL || m->philo == NULL || m->thread == NULL
+		|| m->pathologist == NULL || m->nutritionist == NULL)
+		return (error_exit(m));
 	i = -1;
 	while (++i < m->info.num_of_philos)
 	{
 		m->philo[i].last_meal_time = 0;
 		m->philo[i].is_full = FALSE;
 		m->philo[i].curr_num_of_meals = 0;
-		gettimeofday(&m->philo[i].birth_time, NULL);
+		if (gettimeofday(&m->philo[i].birth_time, NULL))
+			return (error_exit(m));
 	}
+	return (OK);
 }
 
-void	initialization(t_main *m)
+int	initialization(t_main *m)
 {
 	m->info.num_of_full_philos = 0;
 	m->info.free_name = 0;
@@ -72,8 +80,11 @@ void	initialization(t_main *m)
 		m->info.num_of_finished_meals = m->info.num_of_philos / 2;
 	else
 		m->info.num_of_finished_meals = 1;
-	allocations(m);
-	init_mutexes(m);
+	if (allocations(m))
+		return (ERROR);
+	if (init_mutexes(m))
+		return (ERROR);
+	return (OK);
 }
 
 int	main(int argc, char **argv) // check error cases for leaks
@@ -82,15 +93,20 @@ int	main(int argc, char **argv) // check error cases for leaks
 
 	if (parser(&m, argc, argv))
 		return (ERROR);
-	initialization(&m);
-	pathologists_birth(&m);
-	philosophers_birth(&m);
+	if (initialization(&m))
+		return (ERROR);
+	if (pathologists_birth(&m))
+		return (ERROR);
+	if (philosophers_birth(&m))
+		return (ERROR);
 	if (m.info.num_of_meals != -1)
-		nutritionists_birth(&m);
-	waiter_birth(&m);
+		if (nutritionists_birth(&m))
+			return (ERROR);
+	if (waiter_birth(&m))
+		return (ERROR);
 	
 	wait_threads(&m);
 	destroy_mutexes(&m);
 	mem_free(&m);
-	return (0);
+	return (OK);
 }

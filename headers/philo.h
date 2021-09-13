@@ -6,7 +6,7 @@
 /*   By: alisa <alisa@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/03 02:41:33 by alisa             #+#    #+#             */
-/*   Updated: 2021/09/13 06:58:52 by alisa            ###   ########.fr       */
+/*   Updated: 2021/09/13 12:45:17 by alisa            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,8 @@ int		destroy_mutexes(t_main *m);
 void	mem_free(t_main *m);
 int		print_error(char *str);
 int		error_exit(t_main *m);
+int		critical_exit(t_main *m);
+void	*critical_exit_v(t_main *m);
 long int	ft_atoi(const char *str);
 
 #endif
