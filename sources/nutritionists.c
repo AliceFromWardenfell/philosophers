@@ -6,7 +6,7 @@
 /*   By: alisa <alisa@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/12 10:42:29 by alisa             #+#    #+#             */
-/*   Updated: 2021/09/12 13:39:06 by alisa            ###   ########.fr       */
+/*   Updated: 2021/09/13 06:00:15 by alisa            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ static void	*watch_for_diet(void *arg)
 		while (++i < j)
 			if (check_nutrition(m, i))
 				return (NULL);
-		if (usleep(1000))
+		if (usleep(100))
 			return (NULL);
 	}
 	return (NULL);
@@ -71,7 +71,7 @@ int	nutritionists_birth(t_main *m)
 	i = -1;
 	while (++i < m->info.num_of_pathologists)
 	{
-		if (pthread_create(&m->pathologist[i], NULL, &watch_for_diet, (void *)m))
+		if (pthread_create(&m->nutritionist[i], NULL, &watch_for_diet, (void *)m))
 			return (ERROR);
 	}
 	return (OK);

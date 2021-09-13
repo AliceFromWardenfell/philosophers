@@ -6,7 +6,7 @@
 /*   By: alisa <alisa@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/10 03:58:34 by alisa             #+#    #+#             */
-/*   Updated: 2021/09/12 13:16:17 by alisa            ###   ########.fr       */
+/*   Updated: 2021/09/13 03:24:29 by alisa            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ int	unlock_all_philo(t_main *m, int expected_amount_of_meals)
 	i = -1;
 	while (TRUE)
 	{
-		printf("%d %d\n", m->info.num_of_finished_meals, expected_amount_of_meals);
+		// printf("%d %d\n", m->info.num_of_finished_meals, expected_amount_of_meals);
 		if (m->info.num_of_finished_meals == expected_amount_of_meals)
 		{
 			while (++i < m->info.num_of_philos)

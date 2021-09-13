@@ -6,7 +6,7 @@
 /*   By: alisa <alisa@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/03 02:41:07 by alisa             #+#    #+#             */
-/*   Updated: 2021/09/12 13:19:45 by alisa            ###   ########.fr       */
+/*   Updated: 2021/09/13 04:52:03 by alisa            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ void	allocations(t_main *m)
 	m->philo = malloc(m->info.num_of_philos * sizeof(*m->philo));
 	m->thread = malloc(m->info.num_of_philos * sizeof(*m->thread));
 	m->pathologist = malloc(m->info.num_of_pathologists * sizeof(pthread_t));
+	m->nutritionist = malloc(m->info.num_of_nutritionists * sizeof(pthread_t));
 	i = -1;
 	while (++i < m->info.num_of_philos)
 	{
@@ -53,11 +54,6 @@ void	allocations(t_main *m)
 
 void	initialization(t_main *m)
 {
-	m->info.num_of_philos = NUMBER_OF_PHILOSOPHERS;
-	m->info.time_to_die = TIME_TO_DIE;
-	m->info.time_to_eat = TIME_TO_EAT * 1000;
-	m->info.time_to_sleep = TIME_TO_SLEEP * 1000;
-	m->info.num_of_meals = NUMBER_OF_TIME_EACH_PHILOSOPHER_MUST_EAT;
 	m->info.num_of_full_philos = 0;
 	m->info.free_name = 0;
 	m->info.free_name_p = -1;
@@ -69,6 +65,7 @@ void	initialization(t_main *m)
 	m->mutex_fork = NULL;
 	m->mutex_philo = NULL;
 	m->pathologist = NULL;
+	m->nutritionist = NULL;
 	m->philo =  NULL;
 	m->thread = NULL;
 	if (m->info.num_of_philos % 2 == 0)
@@ -79,40 +76,21 @@ void	initialization(t_main *m)
 	init_mutexes(m);
 }
 
-int	main(void)
+int	main(int argc, char **argv) // check error cases on leaks
 {
 	t_main			m;
-	int				i;
 
+	if (parser(&m, argc, argv))
+		return (ERROR);
 	initialization(&m);
 	pathologists_birth(&m);
-	philos_birth(&m);
-	nutritionists_birth(&m);
+	philosophers_birth(&m);
+	if (m.info.num_of_meals != -1)
+		nutritionists_birth(&m);
 	waiter_birth(&m);
-	// nutritionist(&m);
-	// while (TRUE)
-	// 	usleep(1000000);
-	i = -1;
-	while (++i < m.info.num_of_philos)
-		pthread_join(m.thread[i], NULL);
-	i = -1;
-	while (++i < m.info.num_of_pathologists)
-		pthread_join(m.pathologist[i], NULL);
-	i = -1;
-	while (++i < m.info.num_of_philos)
-		pthread_mutex_destroy(&m.mutex_fork[i]);
-	i = -1;
-	while (++i < m.info.num_of_philos)
-		pthread_mutex_destroy(&m.mutex_philo[i]);
-	i = -1;
-	while (++i < 2)
-		pthread_mutex_destroy(&m.mutex_ctrl[i]);
-	// free(m.philo);
-	free(m.mutex_fork);
-	free(m.mutex_ctrl);
-	free(m.thread);
+	
+	wait_threads(&m);
+	destroy_mutexes(&m);
+	mem_free(&m);
 	return (0);
 }
-// pthread_mutex_init(&m.locks[i], NULL);
-// pthread_create(&t1[i], NULL, &philo_life, (void *)&m);
-// pthread_join(t1[i], NULL);

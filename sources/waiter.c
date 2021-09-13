@@ -6,7 +6,7 @@
 /*   By: alisa <alisa@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/10 00:55:22 by alisa             #+#    #+#             */
-/*   Updated: 2021/09/12 13:34:31 by alisa            ###   ########.fr       */
+/*   Updated: 2021/09/13 06:00:49 by alisa            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ static int	allow_odd_ones_to_eat(t_main *m, int expected_amount_of_meals)
 			}
 			break ;
 		}
-		if (usleep(1000))
+		if (usleep(100))
 			return (ERROR);
 	}
 	return (OK);
@@ -80,7 +80,7 @@ static int	allow_even_ones_to_eat(t_main *m)
 			}
 			break ;
 		}
-		if (usleep(1000))
+		if (usleep(100))
 			return (ERROR);
 	}
 	return (OK);
@@ -114,7 +114,7 @@ static int	allow_last_one_to_eat(t_main *m)
 			}
 			break ;
 		}
-		if (usleep(1000))
+		if (usleep(100))
 			return (ERROR);
 	}
 	return (OK);

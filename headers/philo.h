@@ -6,7 +6,7 @@
 /*   By: alisa <alisa@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/03 02:41:33 by alisa             #+#    #+#             */
-/*   Updated: 2021/09/12 13:59:08 by alisa            ###   ########.fr       */
+/*   Updated: 2021/09/13 05:48:14 by alisa            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,12 +21,6 @@
 # include <errno.h> //?
 # include <string.h> //?
 
-# define NUMBER_OF_PHILOSOPHERS 200
-# define TIME_TO_DIE 900
-# define TIME_TO_EAT 200
-# define TIME_TO_SLEEP 100
-# define NUMBER_OF_TIME_EACH_PHILOSOPHER_MUST_EAT 7
-
 # define NAME 0
 # define MEAL 1
 # define ALIVE 2
@@ -36,8 +30,6 @@
 # define ERROR 1
 # define FALSE 0
 # define TRUE 1
-# define OFF 0
-# define ON 1
 
 typedef struct s_info
 {
@@ -67,8 +59,9 @@ typedef struct s_philo
 typedef struct s_main
 {
 	pthread_t		*thread;
-	pthread_t		*pathologist;
 	pthread_t		waiter;
+	pthread_t		*pathologist;
+	pthread_t		*nutritionist;
 	pthread_mutex_t	*mutex_fork;
 	pthread_mutex_t	*mutex_philo;
 	pthread_mutex_t	*mutex_ctrl;
@@ -76,7 +69,8 @@ typedef struct s_main
 	struct s_philo	*philo;
 }					t_main;
 
-int		philos_birth(t_main *m);
+int		parser(t_main *m, int argc, char **argv);
+int		philosophers_birth(t_main *m);
 int		waiter_birth(t_main *m);
 int		pathologists_birth(t_main *m);
 int		nutritionists_birth(t_main *m);
@@ -85,6 +79,11 @@ long	curr_timestamp(t_main *m, int philo_name);
 int		smb_died(t_main *m);
 int		all_full(t_main *m);
 int		unlock_all_philo(t_main *m, int expected_amount_of_meals);
-int		error(t_main *m);
+int		wait_threads(t_main *m);
+int		destroy_mutexes(t_main *m);
+void	mem_free(t_main *m);
+int		print_error(char *str);
+int		error_exit(t_main *m);
+long int	ft_atoi(const char *str);
 
 #endif

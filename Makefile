@@ -11,12 +11,14 @@ vpath %.h	$(HDRS_DIR)
 INCLUDES	:= -I$(HDRS_DIR)
 
 SRCS		:= main.c \
-			error.c \
+			parser.c \
 			philosophers.c \
 			waiter.c \
 			pathologists.c \
 			nutritionists.c \
-			utils.c
+			exit.c \
+			utils.c \
+			ft_atoi.c
 
 OBJS_DIR	:= .objects
 OBJS		:= $(SRCS:%.c=$(OBJS_DIR)/%.o)
