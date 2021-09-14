@@ -6,7 +6,7 @@
 /*   By: alisa <alisa@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/03 02:41:33 by alisa             #+#    #+#             */
-/*   Updated: 2021/09/14 13:17:57 by alisa            ###   ########.fr       */
+/*   Updated: 2021/09/14 14:48:46 by alisa            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,13 @@
 # define PHILO_H
 
 # include <stdio.h>
-// # include <stdlib.h>
+# include <stdlib.h>
 # include <pthread.h>
-// # include <unistd.h>
-// # include <sys/time.h>
+# include <semaphore.h>
+# include <fcntl.h>
+# include <unistd.h>
+# include <sys/wait.h>
+# include <sys/time.h>
 
 # define OK 0
 # define ERROR 1
@@ -34,9 +37,7 @@ typedef struct s_info
 	int		time_to_sleep; //yes
 	int		num_of_meals; //yes
 	// int		num_of_full_philos;
-	// int		free_name;
-	// int		free_name_p;
-	// int		free_name_n;
+	int		free_name;
 	// int		num_of_finished_meals;
 	// int		somebody_died;
 }			t_info;
@@ -58,6 +59,8 @@ typedef struct s_main
 	// pthread_mutex_t	*mutex_fork;
 	// pthread_mutex_t	*mutex_philo;
 	// pthread_mutex_t	*mutex_ctrl;
+	pid_t			*philo;
+	sem_t			*name;
 	struct s_info	info;
 	// struct s_philo	*philo;
 }					t_main;
