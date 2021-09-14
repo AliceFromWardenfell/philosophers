@@ -6,63 +6,40 @@
 /*   By: alisa <alisa@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/14 13:03:46 by alisa             #+#    #+#             */
-/*   Updated: 2021/09/14 16:00:16 by alisa            ###   ########.fr       */
+/*   Updated: 2021/09/14 19:17:20 by alisa            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
-
-void	clean(t_main *m)
-{
-	if (m->philo)
-		free(m->philo);
-}
 
 static int	initialization(t_main *m)
 {
 	int		i;
 
 	i = -1;
-	m->philo = malloc(m->info.num_of_philos * sizeof(pid_t));
-	while (++i < m->info.num_of_philos)
-		m->philo[i] = 0;
-	return (OK);
-}
-
-int	philo_life(t_main *m, int philo_name)
-{
-	if (sem_wait(m->name))
-		return (print_error("sem_wait"));
-	usleep(300000);
-	printf("%d. My name is %d\n", m->info.num_of_philos, philo_name);
-	if (sem_post(m->name))
-		return (print_error("sem_post"));
-	clean(m);
-	return (2);
-}
-
-int	philos_birth(t_main *m)
-{
-	int		i;
-
-	i = -1;
+	m->pid = malloc(m->info.num_of_philos * sizeof(pid_t));
+	m->philo = malloc(m->info.num_of_philos * sizeof(*m->philo));
 	while (++i < m->info.num_of_philos)
 	{
-		m->philo[i] = fork();
-		if (m->philo[i] == -1)
-			return (print_error("can not create process"));
-		if (!m->philo[i])
-			return (philo_life(m, i + 1));
+		if (gettimeofday(&m->philo[i].birth_time, NULL))
+			return (ERROR);
+		m->philo[i].last_meal_time = 0;
+		m->pid[i] = 0;
 	}
 	return (OK);
 }
 
 int	semaphores_initialization(t_main *m)
 {
-	if (sem_unlink("name"))
-		return (print_error("sem_unlink"));
-	m->name = sem_open("name", O_CREAT, 0644, 1);
-	if (m->name == SEM_FAILED)
+	if (sem_unlink("forks"))
+		print_error("sem_unlink");
+	if (sem_unlink("table"))
+		print_error("sem_unlink");
+	m->forks = sem_open("forks", O_CREAT, 0644, m->info.num_of_philos);
+	if (m->forks == SEM_FAILED)
+		return (print_error("semaphore opening failed"));
+	m->table = sem_open("table", O_CREAT, 0644, 1);
+	if (m->table == SEM_FAILED)
 		return (print_error("semaphore opening failed"));
 	return (OK);
 }
@@ -74,9 +51,14 @@ int	philos_wait(t_main *m)
 	i = -1;
 	while (++i < m->info.num_of_philos)
 	{
-		if (waitpid(m->philo[i], NULL, 0) == -1)
+		// kill(m->philo[i], SIGTERM);
+		if (waitpid(m->pid[i], NULL, 0) == -1)
 			return (print_error("waitpid"));
 	}
+	if (sem_unlink("forks"))
+		print_error("sem_unlink");
+	if (sem_unlink("table"))
+		print_error("sem_unlink");
 	return (OK);
 }
 
@@ -90,7 +72,7 @@ int	main(int argc, char **argv)
 		return (ERROR);
 	if (semaphores_initialization(&m))
 		return (ERROR);
-	if (philos_birth(&m))
+	if (philosophers_birth(&m))
 		return (ERROR);
 	if (philos_wait(&m))
 		return (ERROR);

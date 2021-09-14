@@ -6,11 +6,17 @@
 /*   By: alisa <alisa@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/14 13:16:46 by alisa             #+#    #+#             */
-/*   Updated: 2021/09/14 13:17:50 by alisa            ###   ########.fr       */
+/*   Updated: 2021/09/14 19:17:25 by alisa            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
+
+void	clean(t_main *m)
+{
+	if (m->pid)
+		free(m->pid);
+}
 
 int	print_error(char *str)
 {

@@ -12,7 +12,10 @@ INCLUDES	:= -I$(HDRS_DIR)
 
 SRCS		:= main.c \
 			parser.c \
+			philosophers.c \
+			dinner.c \
 			error.c \
+			utils.c \
 			ft_atoi.c
 
 OBJS_DIR	:= .objects
