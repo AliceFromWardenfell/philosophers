@@ -6,7 +6,7 @@
 /*   By: alisa <alisa@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/14 13:03:46 by alisa             #+#    #+#             */
-/*   Updated: 2021/09/14 15:36:13 by alisa            ###   ########.fr       */
+/*   Updated: 2021/09/14 16:00:16 by alisa            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ int	philo_life(t_main *m, int philo_name)
 {
 	if (sem_wait(m->name))
 		return (print_error("sem_wait"));
-	usleep(500000);
+	usleep(300000);
 	printf("%d. My name is %d\n", m->info.num_of_philos, philo_name);
 	if (sem_post(m->name))
 		return (print_error("sem_post"));
@@ -59,8 +59,10 @@ int	philos_birth(t_main *m)
 
 int	semaphores_initialization(t_main *m)
 {
+	if (sem_unlink("name"))
+		return (print_error("sem_unlink"));
 	m->name = sem_open("name", O_CREAT, 0644, 1);
-	if (!m->name)
+	if (m->name == SEM_FAILED)
 		return (print_error("semaphore opening failed"));
 	return (OK);
 }
@@ -90,7 +92,6 @@ int	main(int argc, char **argv)
 		return (ERROR);
 	if (philos_birth(&m))
 		return (ERROR);
-	printf("Waiting...\n");
 	if (philos_wait(&m))
 		return (ERROR);
 	clean(&m);
