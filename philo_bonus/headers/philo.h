@@ -6,7 +6,7 @@
 /*   By: alisa <alisa@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/03 02:41:33 by alisa             #+#    #+#             */
-/*   Updated: 2021/09/14 14:48:46 by alisa            ###   ########.fr       */
+/*   Updated: 2021/09/14 15:35:48 by alisa            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,6 @@ typedef struct s_info
 	int		time_to_sleep; //yes
 	int		num_of_meals; //yes
 	// int		num_of_full_philos;
-	int		free_name;
 	// int		num_of_finished_meals;
 	// int		somebody_died;
 }			t_info;

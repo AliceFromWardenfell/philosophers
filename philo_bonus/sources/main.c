@@ -6,11 +6,17 @@
 /*   By: alisa <alisa@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/14 13:03:46 by alisa             #+#    #+#             */
-/*   Updated: 2021/09/14 14:50:00 by alisa            ###   ########.fr       */
+/*   Updated: 2021/09/14 15:36:13 by alisa            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
+
+void	clean(t_main *m)
+{
+	if (m->philo)
+		free(m->philo);
+}
 
 static int	initialization(t_main *m)
 {
@@ -20,17 +26,19 @@ static int	initialization(t_main *m)
 	m->philo = malloc(m->info.num_of_philos * sizeof(pid_t));
 	while (++i < m->info.num_of_philos)
 		m->philo[i] = 0;
-	m->info.free_name = 0;
 	return (OK);
 }
 
 int	philo_life(t_main *m, int philo_name)
 {
-	// sem_wait(m->name);
-	usleep(1000000);
+	if (sem_wait(m->name))
+		return (print_error("sem_wait"));
+	usleep(500000);
 	printf("%d. My name is %d\n", m->info.num_of_philos, philo_name);
-	// sem_post(m->name);
-	return (2);	
+	if (sem_post(m->name))
+		return (print_error("sem_post"));
+	clean(m);
+	return (2);
 }
 
 int	philos_birth(t_main *m)
@@ -63,7 +71,10 @@ int	philos_wait(t_main *m)
 
 	i = -1;
 	while (++i < m->info.num_of_philos)
-		waitpid(m->philo[i], NULL, 0);
+	{
+		if (waitpid(m->philo[i], NULL, 0) == -1)
+			return (print_error("waitpid"));
+	}
 	return (OK);
 }
 
@@ -82,6 +93,7 @@ int	main(int argc, char **argv)
 	printf("Waiting...\n");
 	if (philos_wait(&m))
 		return (ERROR);
+	clean(&m);
 	printf("OK\n");
 	return (OK);
 }
