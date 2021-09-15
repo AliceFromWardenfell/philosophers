@@ -6,7 +6,7 @@
 /*   By: alisa <alisa@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/14 19:51:34 by alisa             #+#    #+#             */
-/*   Updated: 2021/09/15 09:02:23 by alisa            ###   ########.fr       */
+/*   Updated: 2021/09/15 17:15:19 by alisa            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ static void	*wait_for_order(void *arg)
 		printf("killing %d...\n", i);
 		kill(m->pid[i], SIGTERM);
 	}
-	return (OK);
+	return (NULL);
 }
 
 int	killer_birth(t_main *m)

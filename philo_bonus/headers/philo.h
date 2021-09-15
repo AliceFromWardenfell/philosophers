@@ -6,7 +6,7 @@
 /*   By: alisa <alisa@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/03 02:41:33 by alisa             #+#    #+#             */
-/*   Updated: 2021/09/15 15:36:50 by alisa            ###   ########.fr       */
+/*   Updated: 2021/09/15 16:46:40 by alisa            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@
 # define EAT 1
 # define NOT_EAT 0
 # define DIED 2
+# define FULL 2
 
 typedef struct s_info
 {
@@ -48,7 +49,6 @@ typedef struct s_info
 
 typedef struct s_philo
 {
-	// int				curr_num_of_meals;
 	// int				is_full;
 	long			last_meal_time;
 	struct timeval	birth_time;
@@ -69,10 +69,12 @@ typedef struct s_main
 	sem_t			*print;
 	sem_t			*kill;
 	sem_t			*table;
+	sem_t			*gluttony;
 	struct s_info	info;
 	struct s_philo	*philo;
 	pthread_t		pathologist;
 	int				name;
+	int				curr_num_of_meals;
 }					t_main;
 
 int			parser(t_main *m, int argc, char **argv);

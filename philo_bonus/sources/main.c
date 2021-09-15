@@ -6,7 +6,7 @@
 /*   By: alisa <alisa@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/14 13:03:46 by alisa             #+#    #+#             */
-/*   Updated: 2021/09/15 15:54:37 by alisa            ###   ########.fr       */
+/*   Updated: 2021/09/15 17:22:49 by alisa            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ static int	initialization(t_main *m)
 		if (gettimeofday(&m->philo[i].birth_time, NULL))
 			return (ERROR);
 		m->philo[i].last_meal_time = 0;
+		m->curr_num_of_meals = 0;
 		m->pid[i] = 0;
 	}
 	return (OK);
@@ -39,6 +40,7 @@ int	semaphores_initialization(t_main *m)
 	sem_unlink("print");
 	sem_unlink("kill");
 	sem_unlink("table");
+	sem_unlink("gluttony");
 	m->forks = sem_open("forks", O_CREAT, 0644, m->info.num_of_philos);
 	if (m->forks == SEM_FAILED)
 		return (print_error("semaphore opening failed"));
@@ -54,6 +56,9 @@ int	semaphores_initialization(t_main *m)
 	m->table = sem_open("table", O_CREAT, 0644, 1);
 	if (m->print == SEM_FAILED)
 		return (print_error("semaphore opening failed"));
+	m->gluttony = sem_open("gluttony", O_CREAT, 0644, m->info.num_of_meals);
+	if (m->print == SEM_FAILED)
+		return (print_error("semaphore opening failed"));
 	return (OK);
 }
 
@@ -64,7 +69,7 @@ int	philos_wait(t_main *m)
 	i = -1;
 	while (++i < m->info.num_of_philos)
 	{
-		// kill(m->philo[i], SIGTERM);
+		// printf("waiting for %d\n", i + 1);
 		if (waitpid(m->pid[i], NULL, 0) == -1)
 			return (print_error("waitpid"));
 	}
@@ -87,7 +92,7 @@ int	main(int argc, char **argv)
 		return (ERROR);
 	if (philos_wait(&m))
 		return (ERROR);
-	if (pthread_join(m.killer, NULL))
+	if (pthread_detach(m.killer))
 		return (ERROR);
 	clean(&m);
 	printf("OK\n");

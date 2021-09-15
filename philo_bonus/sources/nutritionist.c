@@ -1,31 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   error.c                                            :+:      :+:    :+:   */
+/*   nutritionist.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: alisa <alisa@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/09/14 13:16:46 by alisa             #+#    #+#             */
-/*   Updated: 2021/09/15 16:05:03 by alisa            ###   ########.fr       */
+/*   Created: 2021/09/15 16:00:10 by alisa             #+#    #+#             */
+/*   Updated: 2021/09/15 16:09:42 by alisa            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-void	clean(t_main *m)
+void	*wait_for_philos_to_full(void *arg)
 {
-	if (m->pid)
-		free(m->pid);
-	sem_unlink("forks");
-	sem_unlink("alive");
-	sem_unlink("print");
-	sem_unlink("kill");
-	sem_unlink("table");
-	sem_unlink("gluttony");
-}
+	t_main	*m;
 
-int	print_error(char *str)
-{
-	printf("\033[31mERROR:\033[0m %s\n", str);
-	return (ERROR);
+	m = (t_main *)arg;
+	
 }

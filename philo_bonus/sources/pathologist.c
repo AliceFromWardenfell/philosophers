@@ -6,7 +6,7 @@
 /*   By: alisa <alisa@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/15 11:59:24 by alisa             #+#    #+#             */
-/*   Updated: 2021/09/15 14:05:33 by alisa            ###   ########.fr       */
+/*   Updated: 2021/09/15 17:09:14 by alisa            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,14 @@ void	*pathologist(void *arg)
 		timestamp = curr_timestamp(m, m->name);
 		if (timestamp == -1)
 			return (NULL);
-		// printf("%d. %ld %ld %d\n", m->name, timestamp, m->philo[m->name - 1].last_meal_time, m->info.time_to_die);
+		// printf("%d. curr = %d, total = %d\n", m->name, m->curr_num_of_meals, m->info.num_of_meals);
+		if (m->info.num_of_meals != -1 && m->curr_num_of_meals >= m->info.num_of_meals)
+		{
+			printf("bye from pathologist %d\n", m->name);
+			if (sem_post(m->print))
+				return (NULL);
+			break ;
+		}
 		if (timestamp - m->philo[m->name -1].last_meal_time
 			>= m->info.time_to_die)
 		{
