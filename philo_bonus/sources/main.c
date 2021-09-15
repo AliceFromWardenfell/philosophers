@@ -6,7 +6,7 @@
 /*   By: alisa <alisa@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/14 13:03:46 by alisa             #+#    #+#             */
-/*   Updated: 2021/09/14 19:17:20 by alisa            ###   ########.fr       */
+/*   Updated: 2021/09/15 08:55:09 by alisa            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ static int	initialization(t_main *m)
 	int		i;
 
 	i = -1;
+	
 	m->pid = malloc(m->info.num_of_philos * sizeof(pid_t));
 	m->philo = malloc(m->info.num_of_philos * sizeof(*m->philo));
 	while (++i < m->info.num_of_philos)
@@ -31,15 +32,21 @@ static int	initialization(t_main *m)
 
 int	semaphores_initialization(t_main *m)
 {
-	if (sem_unlink("forks"))
-		print_error("sem_unlink");
-	if (sem_unlink("table"))
-		print_error("sem_unlink");
+	sem_unlink("forks");
+	sem_unlink("alive");
+	sem_unlink("print");
+	sem_unlink("kill");
 	m->forks = sem_open("forks", O_CREAT, 0644, m->info.num_of_philos);
 	if (m->forks == SEM_FAILED)
 		return (print_error("semaphore opening failed"));
-	m->table = sem_open("table", O_CREAT, 0644, 1);
-	if (m->table == SEM_FAILED)
+	m->alive = sem_open("alive", O_CREAT, 0644, 1);
+	if (m->alive == SEM_FAILED)
+		return (print_error("semaphore opening failed"));
+	m->print = sem_open("print", O_CREAT, 0644, 1);
+	if (m->print == SEM_FAILED)
+		return (print_error("semaphore opening failed"));
+	m->kill = sem_open("kill", O_CREAT, 0644, 0);
+	if (m->print == SEM_FAILED)
 		return (print_error("semaphore opening failed"));
 	return (OK);
 }
@@ -55,10 +62,6 @@ int	philos_wait(t_main *m)
 		if (waitpid(m->pid[i], NULL, 0) == -1)
 			return (print_error("waitpid"));
 	}
-	if (sem_unlink("forks"))
-		print_error("sem_unlink");
-	if (sem_unlink("table"))
-		print_error("sem_unlink");
 	return (OK);
 }
 
@@ -72,9 +75,13 @@ int	main(int argc, char **argv)
 		return (ERROR);
 	if (semaphores_initialization(&m))
 		return (ERROR);
+	if (killer_birth(&m))
+		return (ERROR);
 	if (philosophers_birth(&m))
 		return (ERROR);
 	if (philos_wait(&m))
+		return (ERROR);
+	if (pthread_join(m.killer, NULL))
 		return (ERROR);
 	clean(&m);
 	printf("OK\n");

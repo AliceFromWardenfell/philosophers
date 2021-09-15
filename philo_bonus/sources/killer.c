@@ -1,29 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   error.c                                            :+:      :+:    :+:   */
+/*   killer.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: alisa <alisa@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/09/14 13:16:46 by alisa             #+#    #+#             */
-/*   Updated: 2021/09/15 08:55:15 by alisa            ###   ########.fr       */
+/*   Created: 2021/09/14 19:51:34 by alisa             #+#    #+#             */
+/*   Updated: 2021/09/15 09:02:23 by alisa            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-void	clean(t_main *m)
+static void	*wait_for_order(void *arg)
 {
-	if (m->pid)
-		free(m->pid);
-	sem_unlink("forks");
-	sem_unlink("alive");
-	sem_unlink("print");
-	sem_unlink("kill");
+	t_main *m;
+	int		i;
+
+	m = (t_main *)arg;
+	if (sem_wait(m->kill))
+		return (NULL);
+	i = -1;
+	while (++i < m->info.num_of_philos)
+	{
+		printf("killing %d...\n", i);
+		kill(m->pid[i], SIGTERM);
+	}
+	return (OK);
 }
 
-int	print_error(char *str)
+int	killer_birth(t_main *m)
 {
-	printf("\033[31mERROR:\033[0m %s\n", str);
-	return (ERROR);
+	if (pthread_create(&m->killer, NULL, &wait_for_order, (void *)m))
+		return (ERROR);
+	return (OK);
 }

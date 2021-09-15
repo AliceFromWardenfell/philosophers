@@ -14,6 +14,7 @@ SRCS		:= main.c \
 			parser.c \
 			philosophers.c \
 			dinner.c \
+			killer.c \
 			error.c \
 			utils.c \
 			ft_atoi.c
