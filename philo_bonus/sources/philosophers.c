@@ -6,7 +6,7 @@
 /*   By: alisa <alisa@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/14 19:07:15 by alisa             #+#    #+#             */
-/*   Updated: 2021/09/15 17:00:12 by alisa            ###   ########.fr       */
+/*   Updated: 2021/09/15 19:56:50 by alisa            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,30 +22,26 @@ static int	philo_thinks(t_main *m, int philo_name)
 	// if (check_if_still_alive(m, philo_name))
 	// 	return (ERROR);
 	if (sem_wait(m->print))
-		return (print_error("sem_wait: print"));
+		return (kill(0, SIGTERM));
 	// printf ("t: print--\n");
 	if (print_status(m, philo_name, "is thinking", NOT_EAT))
 		return (ERROR);
 	if (sem_post(m->print))
-		return (print_error("sem_post: print"));
+		return (kill(0, SIGTERM));
 	// printf ("t: print++\n");
 	return (OK);
 }
 
 static int	philo_sleeps(t_main *m, int philo_name)
-{
-	// if (check_if_still_alive(m, philo_name))
-	// 	return (ERROR);
+{;
 	if (sem_wait(m->print))
 		return (print_error("sem_wait: print"));
-	// printf ("s: print--\n");
 	if (print_status(m, philo_name, "is sleeping", NOT_EAT))
 		return (ERROR);
 	if (sem_post(m->print))
 		return (print_error("sem_post: print"));
-	// printf ("s: print++\n");
 	if (usleep(m->info.time_to_sleep))
-		return (ERROR);
+		return (kill(0, SIGTERM));
 	return (OK);
 }
 
@@ -76,13 +72,13 @@ int	philosophers_birth(t_main *m)
 	i = -1;
 	
 	if (gettimeofday(&sim_start, NULL))
-		return (ERROR);
+		return (kill(0, SIGTERM));
 	while (++i < m->info.num_of_philos)
 	{
 		m->philo[i].birth_time = sim_start;
 		m->pid[i] = fork();
 		if (m->pid[i] == -1)
-			return (print_error("can not create process"));
+			return (kill(0, SIGTERM));
 		if (!m->pid[i])
 			return (philo_life(m, i + 1));
 	}

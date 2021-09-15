@@ -6,7 +6,7 @@
 /*   By: alisa <alisa@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/14 13:16:46 by alisa             #+#    #+#             */
-/*   Updated: 2021/09/15 16:05:03 by alisa            ###   ########.fr       */
+/*   Updated: 2021/09/15 19:57:17 by alisa            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,12 +16,12 @@ void	clean(t_main *m)
 {
 	if (m->pid)
 		free(m->pid);
+	if (m->philo)
+		free(m->philo);
 	sem_unlink("forks");
-	sem_unlink("alive");
 	sem_unlink("print");
 	sem_unlink("kill");
 	sem_unlink("table");
-	sem_unlink("gluttony");
 }
 
 int	print_error(char *str)
