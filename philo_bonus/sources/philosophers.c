@@ -6,7 +6,7 @@
 /*   By: alisa <alisa@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/14 19:07:15 by alisa             #+#    #+#             */
-/*   Updated: 2021/09/15 09:12:59 by alisa            ###   ########.fr       */
+/*   Updated: 2021/09/15 13:23:52 by alisa            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,14 +15,14 @@
 int	check_if_still_alive(t_main *m, int philo_name)
 {
 	long		timestamp;
-	
+
 	if (sem_wait(m->print))
 		return (print_error("sem_wait: print"));
 	// printf ("dc: print--\n");
 	timestamp = curr_timestamp(m, philo_name);
 	if (timestamp == -1)
 		return (ERROR);
-	// printf("%ld %ld %d\n", timestamp, m->philo[philo_name - 1].last_meal_time, m->info.time_to_die);
+	printf("%d. %ld %ld %d\n", philo_name, timestamp, m->philo[philo_name - 1].last_meal_time, m->info.time_to_die);
 	if (timestamp - m->philo[philo_name - 1].last_meal_time
 		>= m->info.time_to_die)
 	{
@@ -36,7 +36,7 @@ int	check_if_still_alive(t_main *m, int philo_name)
 		return (print_error("sem_post: print"));
 	// printf ("dc: print++\n");
 	return (OK);
-}	
+}
 
 static int	philo_thinks(t_main *m, int philo_name)
 {
@@ -72,8 +72,9 @@ static int	philo_sleeps(t_main *m, int philo_name)
 
 static int	philo_life(t_main *m, int philo_name)
 {
-	if (gettimeofday(&m->philo[philo_name - 1].birth_time, NULL))
-		return (ERROR);
+	if (pthread_create(&m->pathologist, NULL,
+		&pathologist, (void *)m))
+		return (print_error("pathologist creation failed"));
 	while (TRUE)
 	{
 		if (philo_eats(m, philo_name))
@@ -89,11 +90,16 @@ static int	philo_life(t_main *m, int philo_name)
 
 int	philosophers_birth(t_main *m)
 {
-	int		i;
-
+	int				i;
+	struct timeval	sim_start;
+	
 	i = -1;
+	
+	if (gettimeofday(&sim_start, NULL))
+		return (ERROR);
 	while (++i < m->info.num_of_philos)
 	{
+		m->philo[i].birth_time = sim_start;
 		m->pid[i] = fork();
 		if (m->pid[i] == -1)
 			return (print_error("can not create process"));

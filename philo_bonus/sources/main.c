@@ -6,7 +6,7 @@
 /*   By: alisa <alisa@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/14 13:03:46 by alisa             #+#    #+#             */
-/*   Updated: 2021/09/15 08:55:09 by alisa            ###   ########.fr       */
+/*   Updated: 2021/09/15 12:05:17 by alisa            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ static int	initialization(t_main *m)
 
 	i = -1;
 	
+	m->info.somebody_died = FALSE;
 	m->pid = malloc(m->info.num_of_philos * sizeof(pid_t));
 	m->philo = malloc(m->info.num_of_philos * sizeof(*m->philo));
 	while (++i < m->info.num_of_philos)

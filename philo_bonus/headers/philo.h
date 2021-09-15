@@ -6,7 +6,7 @@
 /*   By: alisa <alisa@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/03 02:41:33 by alisa             #+#    #+#             */
-/*   Updated: 2021/09/15 08:54:54 by alisa            ###   ########.fr       */
+/*   Updated: 2021/09/15 12:04:57 by alisa            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ typedef struct s_info
 	int		num_of_meals; //yes
 	// int		num_of_full_philos;
 	// int		num_of_finished_meals;
-	// int		somebody_died;
+	int		somebody_died;
 }			t_info;
 
 typedef struct s_philo
@@ -70,11 +70,13 @@ typedef struct s_main
 	sem_t			*kill;
 	struct s_info	info;
 	struct s_philo	*philo;
+	pthread_t		pathologist;
 }					t_main;
 
 int			parser(t_main *m, int argc, char **argv);
 int			philo_eats(t_main *m, int philo_name);
 int			philosophers_birth(t_main *m);
+void		*pathologist(void *arg);
 // int			waiter_birth(t_main *m);
 int			killer_birth(t_main *m);
 // int			nutritionists_birth(t_main *m);
