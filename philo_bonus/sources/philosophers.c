@@ -6,7 +6,7 @@
 /*   By: alisa <alisa@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/14 19:07:15 by alisa             #+#    #+#             */
-/*   Updated: 2021/09/15 20:04:27 by alisa            ###   ########.fr       */
+/*   Updated: 2021/09/15 20:11:13 by alisa            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ static int	philo_thinks(t_main *m, int philo_name)
 }
 
 static int	philo_sleeps(t_main *m, int philo_name)
-{;
+{
 	if (sem_wait(m->print))
 		return (print_error("sem_wait: print"));
 	if (print_status(m, philo_name, "is sleeping", NOT_EAT))
@@ -39,8 +39,7 @@ static int	philo_sleeps(t_main *m, int philo_name)
 static int	philo_life(t_main *m, int philo_name)
 {
 	m->name = philo_name;
-	if (pthread_create(&m->pathologist, NULL,
-		&pathologist, (void *)m))
+	if (pthread_create(&m->pathologist, NULL, &pathologist, (void *)m))
 		return (print_error("pathologist creation failed"));
 	while (TRUE)
 	{
@@ -59,9 +58,8 @@ int	philosophers_birth(t_main *m)
 {
 	int				i;
 	struct timeval	sim_start;
-	
+
 	i = -1;
-	
 	if (gettimeofday(&sim_start, NULL))
 		return (kill(0, SIGTERM));
 	while (++i < m->info.num_of_philos)

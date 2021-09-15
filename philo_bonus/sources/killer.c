@@ -6,7 +6,7 @@
 /*   By: alisa <alisa@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/14 19:51:34 by alisa             #+#    #+#             */
-/*   Updated: 2021/09/15 19:56:07 by alisa            ###   ########.fr       */
+/*   Updated: 2021/09/15 20:08:46 by alisa            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 static void	*wait_for_order(void *arg)
 {
-	t_main *m;
+	t_main	*m;
 	int		i;
 
 	m = (t_main *)arg;

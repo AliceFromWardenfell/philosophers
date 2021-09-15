@@ -6,7 +6,7 @@
 /*   By: alisa <alisa@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/14 13:03:46 by alisa             #+#    #+#             */
-/*   Updated: 2021/09/15 19:55:54 by alisa            ###   ########.fr       */
+/*   Updated: 2021/09/15 20:09:16 by alisa            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@ static int	initialization(t_main *m)
 	int		i;
 
 	i = -1;
-	
 	m->name = 0;
 	m->info.somebody_died = FALSE;
 	m->pid = NULL;
@@ -84,7 +83,7 @@ static int	philos_wait(t_main *m)
 
 int	main(int argc, char **argv)
 {
-	t_main m;
+	t_main	m;
 
 	if (parser(&m, argc, argv))
 		return (ERROR);
