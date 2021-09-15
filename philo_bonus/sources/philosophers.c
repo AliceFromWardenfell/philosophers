@@ -6,29 +6,20 @@
 /*   By: alisa <alisa@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/14 19:07:15 by alisa             #+#    #+#             */
-/*   Updated: 2021/09/15 19:56:50 by alisa            ###   ########.fr       */
+/*   Updated: 2021/09/15 20:04:27 by alisa            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-// int	check_if_still_alive(t_main *m, int philo_name)
-// {
-	
-// }
-
 static int	philo_thinks(t_main *m, int philo_name)
 {
-	// if (check_if_still_alive(m, philo_name))
-	// 	return (ERROR);
 	if (sem_wait(m->print))
 		return (kill(0, SIGTERM));
-	// printf ("t: print--\n");
 	if (print_status(m, philo_name, "is thinking", NOT_EAT))
 		return (ERROR);
 	if (sem_post(m->print))
 		return (kill(0, SIGTERM));
-	// printf ("t: print++\n");
 	return (OK);
 }
 
