@@ -6,7 +6,7 @@
 /*   By: alisa <alisa@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/14 18:56:26 by alisa             #+#    #+#             */
-/*   Updated: 2021/09/14 20:10:20 by alisa            ###   ########.fr       */
+/*   Updated: 2021/09/15 14:05:49 by alisa            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ int	print_status(t_main *m, int philo_name, char *status, int flag)
 	timestamp = curr_timestamp(m, philo_name);
 	if (timestamp == -1)
 		return (ERROR);
+	// printf("    %d. ts = %ld\n", philo_name, timestamp);
 	if (flag == EAT)
 		m->philo[philo_name - 1].last_meal_time = timestamp;
 	printf("%05ld \033[1m%4d\033[0m %s\n", timestamp, philo_name, status);

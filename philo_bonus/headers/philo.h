@@ -6,7 +6,7 @@
 /*   By: alisa <alisa@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/03 02:41:33 by alisa             #+#    #+#             */
-/*   Updated: 2021/09/15 12:04:57 by alisa            ###   ########.fr       */
+/*   Updated: 2021/09/15 15:36:50 by alisa            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,9 +68,11 @@ typedef struct s_main
 	sem_t			*alive;
 	sem_t			*print;
 	sem_t			*kill;
+	sem_t			*table;
 	struct s_info	info;
 	struct s_philo	*philo;
 	pthread_t		pathologist;
+	int				name;
 }					t_main;
 
 int			parser(t_main *m, int argc, char **argv);
@@ -82,7 +84,7 @@ int			killer_birth(t_main *m);
 // int			nutritionists_birth(t_main *m);
 int			print_status(t_main *m, int philo_name, char *status, int flag);
 long		curr_timestamp(t_main *m, int philo_name);
-int			check_if_still_alive(t_main *m, int philo_name);
+// int			check_if_still_alive(t_main *m, int philo_name);
 // int			smb_died(t_main *m);
 // int			all_full(t_main *m);
 // int			unlock_all_philo(t_main *m, int expected_amount_of_meals);

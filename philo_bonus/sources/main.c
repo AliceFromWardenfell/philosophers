@@ -6,7 +6,7 @@
 /*   By: alisa <alisa@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/14 13:03:46 by alisa             #+#    #+#             */
-/*   Updated: 2021/09/15 12:05:17 by alisa            ###   ########.fr       */
+/*   Updated: 2021/09/15 15:54:37 by alisa            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ static int	initialization(t_main *m)
 
 	i = -1;
 	
+	m->name = 0;
 	m->info.somebody_died = FALSE;
 	m->pid = malloc(m->info.num_of_philos * sizeof(pid_t));
 	m->philo = malloc(m->info.num_of_philos * sizeof(*m->philo));
@@ -37,6 +38,7 @@ int	semaphores_initialization(t_main *m)
 	sem_unlink("alive");
 	sem_unlink("print");
 	sem_unlink("kill");
+	sem_unlink("table");
 	m->forks = sem_open("forks", O_CREAT, 0644, m->info.num_of_philos);
 	if (m->forks == SEM_FAILED)
 		return (print_error("semaphore opening failed"));
@@ -47,6 +49,9 @@ int	semaphores_initialization(t_main *m)
 	if (m->print == SEM_FAILED)
 		return (print_error("semaphore opening failed"));
 	m->kill = sem_open("kill", O_CREAT, 0644, 0);
+	if (m->print == SEM_FAILED)
+		return (print_error("semaphore opening failed"));
+	m->table = sem_open("table", O_CREAT, 0644, 1);
 	if (m->print == SEM_FAILED)
 		return (print_error("semaphore opening failed"));
 	return (OK);

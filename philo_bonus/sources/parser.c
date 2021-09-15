@@ -6,7 +6,7 @@
 /*   By: alisa <alisa@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/13 03:53:59 by alisa             #+#    #+#             */
-/*   Updated: 2021/09/15 10:44:15 by alisa            ###   ########.fr       */
+/*   Updated: 2021/09/15 15:32:49 by alisa            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,9 +40,9 @@ static int	check_values(t_main *m)
 		return (print_error("wrong number of philosophers"));
 	if (m->info.time_to_die < 60 || m->info.time_to_die > 10000)
 		return (print_error("wrong time to die"));
-	if (m->info.time_to_eat < 60 || m->info.time_to_eat > 5000)
+	if (m->info.time_to_eat < 0 || m->info.time_to_eat > 5000)
 		return (print_error("wrong time to eat"));
-	if (m->info.time_to_sleep < 60 || m->info.time_to_sleep > 5000)
+	if (m->info.time_to_sleep < 0 || m->info.time_to_sleep > 5000)
 		return (print_error("wrong time to sleep"));
 	if (m->info.num_of_meals != -1
 		&& (m->info.num_of_meals < 1 || m->info.num_of_meals > 1000))
