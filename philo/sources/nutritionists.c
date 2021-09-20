@@ -6,7 +6,7 @@
 /*   By: alisa <alisa@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/12 10:42:29 by alisa             #+#    #+#             */
-/*   Updated: 2021/09/13 13:38:41 by alisa            ###   ########.fr       */
+/*   Updated: 2021/09/17 12:34:17 by alisa            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,11 @@ static int	check_nutrition(t_main *m, int i)
 	if (pthread_mutex_lock(&m->mutex_ctrl[DIET]))
 		return (critical_exit(m));
 	if (smb_died(m) == TRUE)
+	{
+		if (pthread_mutex_unlock(&m->mutex_ctrl[DIET]))
+			return (critical_exit(m));
 		return (2);
+	}
 	if (m->philo[i].curr_num_of_meals >= m->info.num_of_meals
 		&& m->philo[i].is_full == FALSE)
 	{
