@@ -1,10 +1,12 @@
 # philosophers
 
-Two solutions to the problem of dining philosophers
+Two solutions to the problem of [dining philosophers](https://en.wikipedia.org/wiki/Dining_philosophers_problem).  
+-In the first case philosophers are threads and forks are in between them.  
+-In the second case philosophers are processes and forks are in the middle of the table.  
 
 Task definition: [subject](https://drive.google.com/file/d/1ivrehSAzw_d76PPCLjt_v5CNfAkqW-tK/view?usp=sharing)
 
-This project is written according to the Norm: [norm](https://drive.google.com/file/d/1cf_thz7IUjWxVRlPbDyfv0hACNSz9_9s/view?usp=sharing)
+This project is written according to the [Norm](https://drive.google.com/file/d/1cf_thz7IUjWxVRlPbDyfv0hACNSz9_9s/view?usp=sharing).
 
 ### Short instructions:
 1. Type "make" in one of two directories
